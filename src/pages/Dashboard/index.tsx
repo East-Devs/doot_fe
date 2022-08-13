@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import  io  from "socket.io-client";
 
 // hooks
 import { useRedux } from "../../hooks/index";
@@ -12,11 +13,30 @@ import Leftbar from "./Leftbar";
 import ConversationUser from "./ConversationUser/index";
 import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
+import { setSocket } from "../../redux/actions";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
+  
+  
   // global store
-  const { useAppSelector } = useRedux();
+  const { useAppSelector,dispatch } = useRedux();
+  
+  //safyan
+  const socketClient = React.useRef<SocketIOClient.Socket>();
+  React.useEffect(() => {
+    socketClient.current = io("ws://localhost:8000");
+    if(socketClient.current){
+      dispatch(setSocket(socketClient.current));
+      // socketClient.current.on("getMessage", (data:{senderId:String,text:String}) => {
+        // setArrivalMessage({
+        //   sender: data.senderId,
+        //   text: data.text,
+        //   createdAt: Date.now(),
+        // });
+      // });
+    }
+  }, []);
 
   const { selectedChat } = useAppSelector(state => ({
     selectedChat: state.Chats.selectedChat,

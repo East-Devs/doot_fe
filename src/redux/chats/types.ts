@@ -13,6 +13,11 @@ export enum ChatsActionTypes {
   GET_CHAT_USER_CONVERSATIONS = "@@chats/GET_CHAT_USER_CONVERSATIONS",
   TOGGLE_USER_DETAILS_TAB = "@@chats/TOGGLE_USER_DETAILS_TAB",
 
+  //safyan
+  SET_CHAT_USER_CONVERSATION = "@@chats/SET_CHAT_USER_CONVERSATION",
+  SET_SOCKET = "@@chats/SET_SOCKET",
+
+
   // MESSAGE
   ON_SEND_MESSAGE = "@@chats/ON_SEND_MESSAGE",
   RECEIVE_MESSAGE = "@@chats/RECEIVE_MESSAGE",
@@ -38,4 +43,5 @@ export interface ChatsState {
   isOpenUserDetails: boolean;
   channelDetails: object;
   archiveContacts: Array<any>;
+  socket: any;
 }

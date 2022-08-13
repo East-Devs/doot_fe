@@ -46,6 +46,7 @@ function* loginUser({ payload: { user } }: any) {
         email: user.email,
         password: user.password,
       });
+      
       setLoggeedInUser(response);
       yield put(
         authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)

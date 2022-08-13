@@ -73,6 +73,8 @@ const Index = (props: IndexProps) => {
   get data
   */
   useEffect(() => {
+    // debugger;
+    // safyan
     dispatch(getFavourites());
     dispatch(getDirectMessages());
     dispatch(getChannels());
@@ -158,6 +160,7 @@ const Index = (props: IndexProps) => {
   */
 
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
+    debugger;
     if (isChannel) {
       dispatch(getChannelDetails(id));
     } else {

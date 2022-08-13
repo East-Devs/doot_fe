@@ -15,6 +15,7 @@ export interface ImageTypes {
   downloadLink: string;
 }
 export interface MessagesTypes {
+  [x: string]: any;
   mId: number;
   text?: string;
   time: string;

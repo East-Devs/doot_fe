@@ -16,9 +16,10 @@ export const authLoginApiResponseError = (
 });
 
 export const loginUser = (user: any) => {
+  // was {user}
   return {
     type: AuthLoginActionTypes.LOGIN_USER,
-    payload: { user },
+    payload: user ,
   };
 };
 

@@ -78,6 +78,8 @@ const Index = ({ isChannel }: IndexProps) => {
   send message
   */
   const onSend = (data: any) => {
+    debugger;
+    //safyan
     let params: any = {
       text: data.text && data.text,
       time: new Date().toISOString(),

@@ -10,6 +10,7 @@ const Login = (state = INIT_STATE, action: any) => {
     case AuthLoginActionTypes.API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case AuthLoginActionTypes.LOGIN_USER:
+          localStorage.setItem("authUser",JSON.stringify(action.payload.data) );
           return {
             ...state,
             user: action.payload.data,

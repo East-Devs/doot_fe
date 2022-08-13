@@ -19,16 +19,18 @@ const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
-  const { profileDetails, getProfileLoading, isProfileFetched } =
+  const { profileDetails, getProfileLoading, isProfileFetched,user } =
     useAppSelector(state => ({
       profileDetails: state.Profile.profileDetails,
       getProfileLoading: state.Profile.getProfileLoading,
       isProfileFetched: state.Profile.isProfileFetched,
+      user: state.Login.user,
     }));
 
   // get user profile details
   useEffect(() => {
-    dispatch(getProfileDetails());
+    debugger;
+    dispatch(getProfileDetails(user));
   }, [dispatch]);
 
   return (

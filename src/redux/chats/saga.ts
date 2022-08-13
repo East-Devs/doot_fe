@@ -53,11 +53,11 @@ function* getFavourites() {
 function* getDirectMessages() {
   try {
     const response: Promise<any> = yield call(getDirectMessagesApi);
+    debugger;
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.GET_DIRECT_MESSAGES, response)
     );
   } catch (error: any) {
-    console.log(error);
     yield put(
       chatsApiResponseError(ChatsActionTypes.GET_DIRECT_MESSAGES, error)
     );
@@ -112,6 +112,7 @@ function* getChatUserDetails({ payload: id }: any) {
 function* getChatUserConversations({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getChatUserConversationsApi, id);
+    debugger;
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
@@ -124,6 +125,36 @@ function* getChatUserConversations({ payload: id }: any) {
     );
   }
 }
+
+function* setChatUserConversation({ payload: message }: any) {
+  try {
+    debugger;
+    yield put(
+      chatsApiResponseSuccess(
+        ChatsActionTypes.SET_CHAT_USER_CONVERSATION,
+        message
+      )
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS, error)
+    );
+  }
+}
+
+// function* setSocket({ payload: socket }: any) {
+//   try {
+//     debugger;
+//     yield put(
+//       chatsApiResponseSuccess(
+//         ChatsActionTypes.SET_SOCKET,
+//         socket
+//       )
+//     );
+//   } catch (error: any) {
+//    console.log(error)
+//   }
+// }
 
 function* onSendMessage({ payload: data }: any) {
   try {
@@ -327,6 +358,14 @@ export function* watchGetChatUserConversations() {
     getChatUserConversations
   );
 }
+
+//safyan
+// export function* watchSetSocket() {
+//   yield takeEvery(
+//     ChatsActionTypes.SET_SOCKET,
+//     setSocket
+//   );
+// }
 export function* watchOnSendMessage() {
   yield takeEvery(ChatsActionTypes.ON_SEND_MESSAGE, onSendMessage);
 }

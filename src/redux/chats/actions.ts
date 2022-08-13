@@ -55,6 +55,16 @@ export const getChatUserConversations = (
   payload: selectedChat,
 });
 
+export const setSocket = (
+  socket: any
+) => {
+  // debugger;
+  return {
+    type: ChatsActionTypes.SET_SOCKET,
+    payload: socket,
+  }
+};
+
 export const toggleUserDetailsTab = (value: boolean) => ({
   type: ChatsActionTypes.TOGGLE_USER_DETAILS_TAB,
   payload: value,

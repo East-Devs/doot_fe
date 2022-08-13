@@ -11,6 +11,10 @@ export const profileApiResponseError = (actionType: string, error: string) => ({
   payload: { actionType, error },
 });
 
-export const getProfileDetails = () => ({
-  type: ProfileActionTypes.GET_PROFILE_DETAILS,
-});
+export const getProfileDetails = (data:any) => {
+  debugger;
+  return {
+    type: ProfileActionTypes.GET_PROFILE_DETAILS,
+    payload:data
+  }
+};

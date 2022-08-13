@@ -1,3 +1,4 @@
+import axios from "axios";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -8,6 +9,9 @@ const getFavourites = () => {
 };
 
 const getDirectMessages = () => {
+  // debugger;
+  // safyan
+  // return axios.get('http://localhost:8000/api/conversations/62f49835c36f0bde9f461fc8');
   return api.get(url.GET_DIRECT_MESSAGES);
 };
 const getChannels = () => {
@@ -27,13 +31,19 @@ const getChatUserDetails = (id: string | number) => {
 };
 
 const getChatUserConversations = (id: string | number) => {
-  return api.get(url.GET_CHAT_USER_CONVERSATIONS + "/" + id, {
-    params: { id },
-  });
+  debugger;
+  //safyan
+  return axios.get('http://localhost:8000/api/conversations/find/' + '62f498bac36f0bde9f461fd2' + '/' + '62f49835c36f0bde9f461fc8');
+  // return api.get(url.GET_CHAT_USER_CONVERSATIONS + "/" + id, {
+  //   params: { id },
+  // });
 };
 
 const sendMessage = (data: object) => {
-  return api.create(url.SEND_MESSAGE, data);
+  debugger
+  //safyan
+  return axios.post('http://localhost:8000/api/messages',data);
+  // return api.create(url.SEND_MESSAGE, data);
 };
 
 const receiveMessage = (id: string | number) => {

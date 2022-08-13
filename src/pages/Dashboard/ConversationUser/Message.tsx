@@ -298,19 +298,21 @@ const Message = ({
     ? userProfile.profileImage
     : imagePlaceholder;
   const channeluserProfile =
-    message.meta.userData && message.meta.userData.profileImage
+    message?.meta?.userData && message?.meta?.userData?.profileImage
       ? message.meta.userData.profileImage
       : imagePlaceholder;
   const chatUserprofile = chatUserDetails.profileImage
     ? chatUserDetails.profileImage
     : imagePlaceholder;
   const profile = isChannel ? channeluserProfile : chatUserprofile;
-  const date = formateDate(message.time, "hh:mmaaa");
-  const isSent = message.meta.sent;
-  const isReceived = message.meta.received;
-  const isRead = message.meta.read;
-  const isForwarded = message.meta.isForwarded;
-  const channdelSenderFullname = message.meta.userData
+  // const date = formateDate(message.time, "hh:mmaaa");
+  // safyan
+  const date = formateDate(message.createdAt, "hh:mmaaa");
+  const isSent = message?.meta?.sent || true;
+  const isReceived = message?.meta?.received || true;
+  const isRead = message?.meta?.read || true;
+  const isForwarded = message?.meta?.isForwarded || true;
+  const channdelSenderFullname = message?.meta?.userData
     ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
     : "-";
   const fullName = isChannel ? channdelSenderFullname : chatUserFullName;

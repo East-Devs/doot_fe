@@ -7,10 +7,13 @@ export const INIT_STATE: ChatsState = {
   channels: [],
   selectedChat: null,
   chatUserDetails: {},
-  chatUserConversations: {},
+  chatUserConversations: {
+    messages: {},
+  },
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
+  socket:null
 };
 
 const Chats = (state = INIT_STATE, action: any) => {
@@ -27,7 +30,11 @@ const Chats = (state = INIT_STATE, action: any) => {
         case ChatsActionTypes.GET_DIRECT_MESSAGES:
           return {
             ...state,
-            directMessages: action.payload.data,
+            directMessages: action.payload.data.map((item: any) =>  ({
+              ...item,
+              firstName:item.email,
+              lastName:item.email
+            })),
             isDirectMessagesFetched: true,
             getDirectMessagesLoading: false,
             isContactsAdded: false,
@@ -68,6 +75,13 @@ const Chats = (state = INIT_STATE, action: any) => {
             isUserMessageSent: false,
             isMessageDeleted: false,
             isMessageForwarded: false,
+          };
+        case ChatsActionTypes.SET_CHAT_USER_CONVERSATION:
+          return {
+            ...state,
+            chatUserConversations: {
+              ...state.chatUserConversations,
+              messages:[action.payload]},
           };
         case ChatsActionTypes.ON_SEND_MESSAGE:
           return {
@@ -283,6 +297,12 @@ const Chats = (state = INIT_STATE, action: any) => {
         isUserConversationsFetched: false,
         getUserConversationsLoading: true,
         isUserMessageSent: false,
+      };
+    case ChatsActionTypes.SET_SOCKET:
+      // debugger;
+      return {
+        ...state,
+        socket:action.payload,
       };
     case ChatsActionTypes.TOGGLE_USER_DETAILS_TAB:
       return {

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -11,9 +12,15 @@ const postFakeForgetPwd = (data: any) =>
 const postJwtForgetPwd = (data: any) =>
   api.create(url.POST_FAKE_JWT_PASSWORD_FORGET, data);
 
-const postFakeLogin = (data: any) => api.create(url.POST_FAKE_LOGIN, data);
-
-const postJwtLogin = (data: any) => api.create(url.POST_FAKE_JWT_LOGIN, data);
+const postFakeLogin = (data: any) => { 
+  //safyan
+  debugger;
+  return axios.post( 'http://localhost:8000/api/auth/login', data);
+  // return api.create(url.POST_FAKE_LOGIN, data);
+}
+const postJwtLogin = (data: any) => {
+  return api.create(url.POST_FAKE_JWT_LOGIN, data)
+};
 
 // Register Method
 const postFakeRegister = (data: any) => {
