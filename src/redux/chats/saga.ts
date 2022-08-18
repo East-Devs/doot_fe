@@ -50,10 +50,10 @@ function* getFavourites() {
   }
 }
 
-function* getDirectMessages() {
+function* getDirectMessages({payload: id}:any) {
   try {
-    const response: Promise<any> = yield call(getDirectMessagesApi);
-    debugger;
+    const response: Promise<any> = yield call(getDirectMessagesApi,id);
+    // debugger;
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.GET_DIRECT_MESSAGES, response)
     );
@@ -109,10 +109,10 @@ function* getChatUserDetails({ payload: id }: any) {
   }
 }
 
-function* getChatUserConversations({ payload: id }: any) {
+function* getChatUserConversations({ payload: ids }: any) {
   try {
-    const response: Promise<any> = yield call(getChatUserConversationsApi, id);
-    debugger;
+    const response: Promise<any> = yield call(getChatUserConversationsApi, ids);
+    // debugger;
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
@@ -125,36 +125,6 @@ function* getChatUserConversations({ payload: id }: any) {
     );
   }
 }
-
-function* setChatUserConversation({ payload: message }: any) {
-  try {
-    debugger;
-    yield put(
-      chatsApiResponseSuccess(
-        ChatsActionTypes.SET_CHAT_USER_CONVERSATION,
-        message
-      )
-    );
-  } catch (error: any) {
-    yield put(
-      chatsApiResponseError(ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS, error)
-    );
-  }
-}
-
-// function* setSocket({ payload: socket }: any) {
-//   try {
-//     debugger;
-//     yield put(
-//       chatsApiResponseSuccess(
-//         ChatsActionTypes.SET_SOCKET,
-//         socket
-//       )
-//     );
-//   } catch (error: any) {
-//    console.log(error)
-//   }
-// }
 
 function* onSendMessage({ payload: data }: any) {
   try {
@@ -311,7 +281,7 @@ function* readConversation({ payload: id }: any) {
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.READ_CONVERSATION, response)
     );
-    yield put(getDirectMessagesAction());
+    // yield put(getDirectMessagesAction());
     yield put(getFavouritesAction());
     yield put(getChannelsAction());
   } catch (error: any) {

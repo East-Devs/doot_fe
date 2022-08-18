@@ -31,6 +31,7 @@ import AddGroupModal from "../../../components/AddGroupModal";
 import InviteContactModal from "../../../components/InviteContactModal";
 import AddButton from "../../../components/AddButton";
 import ContactModal from "../../../components/ContactModal";
+import { useProfile } from "../../../hooks/index";
 
 import Favourites from "./Favourites";
 import DirectMessages from "./DirectMessages";
@@ -67,8 +68,9 @@ const Index = (props: IndexProps) => {
     archiveContacts: state.Chats.archiveContacts,
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
     chatUserDetails: state.Chats.chatUserDetails,
-  }));
 
+  }));
+const {userProfile} = useProfile()
   /*
   get data
   */
@@ -76,13 +78,13 @@ const Index = (props: IndexProps) => {
     // debugger;
     // safyan
     dispatch(getFavourites());
-    dispatch(getDirectMessages());
+    dispatch(getDirectMessages(userProfile._id));
     dispatch(getChannels());
   }, [dispatch]);
   useEffect(() => {
     if (isFavouriteContactToggled) {
       dispatch(getFavourites());
-      dispatch(getDirectMessages());
+      dispatch(getDirectMessages(userProfile._id));
     }
   }, [dispatch, isFavouriteContactToggled]);
 
@@ -128,7 +130,7 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     if (isContactsAdded) {
       setIsOpenAddContact(false);
-      dispatch(getDirectMessages());
+      dispatch(getDirectMessages(userProfile._id));
     }
   }, [dispatch, isContactsAdded]);
 
@@ -160,14 +162,14 @@ const Index = (props: IndexProps) => {
   */
 
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
-    debugger;
+    // debugger;
     if (isChannel) {
       dispatch(getChannelDetails(id));
     } else {
       dispatch(getChatUserDetails(id));
     }
     dispatch(readConversation(id));
-    dispatch(getChatUserConversations(id));
+    dispatch(getChatUserConversations(userProfile._id,id));
     dispatch(changeSelectedChat(id));
   };
 
@@ -189,7 +191,7 @@ const Index = (props: IndexProps) => {
     if (isContactArchiveToggled) {
       dispatch(getArchiveContact());
       dispatch(getFavourites());
-      dispatch(getDirectMessages());
+      dispatch(getDirectMessages(userProfile._id));
       dispatch(getChannels());
       dispatch(getChatUserDetails(chatUserDetails.id));
     }

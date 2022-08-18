@@ -9,11 +9,11 @@ import { STATUS_TYPES } from "../../../constants";
 interface ChatUserProps {
   user: UserTypes;
   selectedChat: string | number;
-  onSelectChat: (id: number | string) => void;
+  onSelectChat: (id: number | string ) => void;
 }
 const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
-  const fullName = `${user.firstName} ${user.lastName}`;
-  const shortName = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+  const fullName = `${user.fullname}`;
+  const shortName = `${user.fullname?.charAt(0)}`;
 
   const colors = [
     "bg-primary",
@@ -29,9 +29,9 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
   const unRead = user.meta && user.meta.unRead;
 
   const isSelectedChat: boolean =
-    selectedChat && selectedChat === user.id ? true : false;
+    selectedChat && selectedChat === user._id ? true : false;
   const onClick = () => {
-    onSelectChat(user.id);
+    onSelectChat(user._id);
   };
   return (
     <li className={classnames({ active: isSelectedChat })} onClick={onClick}>

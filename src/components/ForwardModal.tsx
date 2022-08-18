@@ -71,9 +71,9 @@ const ContactItem = ({
 }: ContactItemProps) => {
   const fullName = `${contact.firstName} ${contact.lastName}`;
   const onClick = () => {
-    onSelectContact(contact.id, !selected);
+    onSelectContact(contact._id, !selected);
     if (!selected) {
-      onSend([contact.id]);
+      onSend([contact._id]);
     }
   };
 
@@ -207,7 +207,7 @@ const ForwardModal = ({
   share all
   */
   const onShareAll = () => {
-    const allIds = (contactsList || []).map((c: ContactTypes) => c.id);
+    const allIds = (contactsList || []).map((c: ContactTypes) => c._id);
     setSelectedContacts(allIds);
     const data = {
       contacts: [...allIds],

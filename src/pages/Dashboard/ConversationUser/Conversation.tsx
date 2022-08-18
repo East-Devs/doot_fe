@@ -126,7 +126,8 @@ const Conversation = ({
       >
         {(messages || []).map((message: MessagesTypes, key: number) => {
           // const isFromMe = message.meta.sender + "" === userProfile.uid + "";
-          const isFromMe = message?.meta?.sender + "" === userProfile?.uid + "" || true;
+          // debugger;
+          const isFromMe = message?.sender + "" === userProfile?._id + "";
           return (
             <Message
               message={message}

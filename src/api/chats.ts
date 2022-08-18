@@ -8,11 +8,11 @@ const getFavourites = () => {
   return api.get(url.GET_FAVOURITES);
 };
 
-const getDirectMessages = () => {
+const getDirectMessages = (id: string | number) => {
   // debugger;
   // safyan
-  // return axios.get('http://localhost:8000/api/conversations/62f49835c36f0bde9f461fc8');
-  return api.get(url.GET_DIRECT_MESSAGES);
+  return axios.get(`http://localhost:8000/api/conversations/${id}`);
+  // return api.get(url.GET_DIRECT_MESSAGES);
 };
 const getChannels = () => {
   return api.get(url.GET_CHANNELS);
@@ -30,17 +30,17 @@ const getChatUserDetails = (id: string | number) => {
   return api.get(url.GET_CHAT_USER_DETAILS + "/" + id, { params: { id } });
 };
 
-const getChatUserConversations = (id: string | number) => {
-  debugger;
+const getChatUserConversations = (ids : any) => {
+  // debugger;
   //safyan
-  return axios.get('http://localhost:8000/api/conversations/find/' + '62f498bac36f0bde9f461fd2' + '/' + '62f49835c36f0bde9f461fc8');
+  return axios.get(`http://localhost:8000/api/conversations/find/${ids.user1Id}/${ids.user2Id}`);
   // return api.get(url.GET_CHAT_USER_CONVERSATIONS + "/" + id, {
   //   params: { id },
   // });
 };
 
 const sendMessage = (data: object) => {
-  debugger
+  // debugger
   //safyan
   return axios.post('http://localhost:8000/api/messages',data);
   // return api.create(url.SEND_MESSAGE, data);

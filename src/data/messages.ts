@@ -152,7 +152,7 @@ let conversations: ConversationTypes[] = [
   {
     conversationId: 2,
     userId: "61665bcb9a456823e282afa7",
-    typingUser: contacts[0].id,
+    typingUser: contacts[0]._id,
     isGroupConversation: true,
     messages: [
       {
@@ -161,7 +161,7 @@ let conversations: ConversationTypes[] = [
         time: new Date().toISOString(),
         meta: {
           receiver: myId,
-          sender: contacts[0].id,
+          sender: contacts[0]._id,
           userData: contacts[0],
           sent: true,
           received: true,
@@ -173,7 +173,7 @@ let conversations: ConversationTypes[] = [
         text: "Good morning, How are you? What about our next meeting?",
         time: new Date().toISOString(),
         meta: {
-          receiver: contacts[0].id,
+          receiver: contacts[0]._id,
           sender: myId,
           userData: contacts[0],
           sent: true,
@@ -187,7 +187,7 @@ let conversations: ConversationTypes[] = [
         time: new Date().toISOString(),
         meta: {
           receiver: myId,
-          sender: contacts[1].id,
+          sender: contacts[1]._id,
           userData: contacts[1],
           sent: true,
           received: true,
@@ -200,7 +200,7 @@ let conversations: ConversationTypes[] = [
         time: new Date().toISOString(),
         meta: {
           receiver: myId,
-          sender: contacts[2].id,
+          sender: contacts[2]._id,
           userData: contacts[2],
           sent: true,
           received: true,
@@ -212,7 +212,7 @@ let conversations: ConversationTypes[] = [
         text: "@Jean Berwick, Please Assign AB-123 to me",
         time: new Date().toISOString(),
         meta: {
-          receiver: contacts[0].id,
+          receiver: contacts[0]._id,
           sender: myId,
           userData: contacts[0],
           sent: true,
@@ -226,7 +226,7 @@ let conversations: ConversationTypes[] = [
         time: new Date().toISOString(),
         meta: {
           receiver: myId,
-          sender: contacts[3].id,
+          sender: contacts[3]._id,
           userData: contacts[3],
           sent: true,
           received: true,

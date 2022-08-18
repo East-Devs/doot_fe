@@ -39,22 +39,25 @@ const Index = ({ isChannel }: IndexProps) => {
 
   const {
     chatUserDetails,
+    selectedChat,
     chatUserConversations,
     isUserMessageSent,
     isMessageDeleted,
     isMessageForwarded,
     isUserMessagesDeleted,
     isImageDeleted,
+    socket
   } = useAppSelector(state => ({
     chatUserDetails: state.Chats.chatUserDetails,
+    selectedChat: state.Chats.selectedChat,
     chatUserConversations: state.Chats.chatUserConversations,
     isUserMessageSent: state.Chats.isUserMessageSent,
     isMessageDeleted: state.Chats.isMessageDeleted,
     isMessageForwarded: state.Chats.isMessageForwarded,
     isUserMessagesDeleted: state.Chats.isUserMessagesDeleted,
     isImageDeleted: state.Chats.isImageDeleted,
+    socket:state.Chats.socket
   }));
-
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
   };
@@ -78,7 +81,7 @@ const Index = ({ isChannel }: IndexProps) => {
   send message
   */
   const onSend = (data: any) => {
-    debugger;
+    // debugger;
     //safyan
     let params: any = {
       text: data.text && data.text,
@@ -86,14 +89,15 @@ const Index = ({ isChannel }: IndexProps) => {
       image: data.image && data.image,
       attachments: data.attachments && data.attachments,
       meta: {
-        receiver: chatUserDetails.id,
-        sender: userProfile.uid,
+        receiver: selectedChat,
+        sender: userProfile._id,
       },
     };
     if (replyData && replyData !== null) {
       params["replyOf"] = replyData;
     }
-
+    // debugger;
+    socket.emit("sendMessage", params);
     dispatch(onSendMessage(params));
     if (!isChannel) {
       setTimeout(() => {
@@ -117,7 +121,8 @@ const Index = ({ isChannel }: IndexProps) => {
       isUserMessagesDeleted ||
       isImageDeleted
     ) {
-      dispatch(getChatUserConversations(chatUserDetails.id));
+      // debugger;
+      dispatch(getChatUserConversations(userProfile._id, selectedChat));
     }
   }, [
     dispatch,

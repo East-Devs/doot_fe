@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
+import Peer from "simple-peer";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
@@ -26,7 +27,7 @@ import AddPinnedTabModal from "../../../components/AddPinnedTabModal";
 import { PinTypes } from "../../../data/chat";
 
 // actions
-import { changeSelectedChat } from "../../../redux/actions";
+import { changeSelectedChat, setStreamInfo } from "../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../constants";
@@ -307,13 +308,44 @@ const UserHead = ({
   onToggleArchive,
 }: UserHeadProps) => {
   // global store
-  const { dispatch } = useRedux();
+  const {useAppSelector, dispatch } = useRedux();
+  const { streamInfo,socket } = useAppSelector(state => ({
+    streamInfo: state.Calls.streamInfo,
+    socket: state.Chats.socket,
+  }));
   /*
     video call modal
     */
   const [isOpenVideoModal, setIsOpenVideoModal] = useState<boolean>(false);
+  
   const onOpenVideo = () => {
     setIsOpenVideoModal(true);
+
+    const peer = new Peer({ initiator: true, trickle: false, stream:streamInfo.myVideo });
+
+		peer.on("signal", (data) => {
+			socket.emit("callUser", {
+				userToCall: chatUserDetails._id,
+				signalData: data,
+				from: 'safyan',
+				name:"safyan",
+			});
+		});
+
+		peer.on("stream", (currentStream) => {
+      dispatch(setStreamInfo({userVideo:currentStream}));
+
+			// userVideo.current.srcObject = currentStream;
+		});
+
+		socket.current.on("callAccepted", (signal:any) => {
+      dispatch(setStreamInfo({callAccepted:true}));
+
+			peer.signal(signal);
+		});
+
+    dispatch(setStreamInfo({peer}));
+		// connectionRef.current = peer;
   };
   const onCloseVideo = () => {
     setIsOpenVideoModal(false);

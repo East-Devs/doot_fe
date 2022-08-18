@@ -40,7 +40,7 @@ const ContactItem = ({
 }: ContactItemProps) => {
   const fullName = `${contact.firstName} ${contact.lastName}`;
   const onCheck = (checked: boolean) => {
-    onSelectContact(contact.id, checked);
+    onSelectContact(contact._id, checked);
   };
 
   return (
@@ -49,10 +49,10 @@ const ContactItem = ({
         <Input
           type="checkbox"
           className="form-check-input"
-          id={`contact-${contact.id}`}
+          id={`contact-${contact._id}`}
           onChange={(e: any) => onCheck(e.target.checked)}
         />
-        <Label className="form-check-label" htmlFor={`contact-${contact.id}`}>
+        <Label className="form-check-label" htmlFor={`contact-${contact._id}`}>
           {fullName}
         </Label>
       </div>

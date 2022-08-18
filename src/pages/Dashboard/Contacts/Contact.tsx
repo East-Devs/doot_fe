@@ -39,7 +39,7 @@ const ContactItem = ({ contact, onSelectChat }: ContactItemProps) => {
   const [color] = useState(Math.floor(Math.random() * colors.length));
 
   return (
-    <li onClick={() => onSelectChat(contact.id)}>
+    <li onClick={() => onSelectChat(contact._id)}>
       <div className="d-flex align-items-center">
         <div className="flex-shrink-0 me-2">
           <div className="avatar-xs">

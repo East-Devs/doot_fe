@@ -14,3 +14,8 @@ export const callsApiResponseError = (actionType: string, error: string) => ({
 export const getCalls = () => ({
   type: CallsActionTypes.GET_CALLS,
 });
+
+export const setStreamInfo = (data:any) => ({
+  type: CallsActionTypes.SET_STREAM_INFO,
+  payload: data
+});

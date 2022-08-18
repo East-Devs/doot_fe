@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import {
@@ -18,6 +18,7 @@ interface GroupProps {
 const Group = ({ group }: GroupProps) => {
   // global store
   const { dispatch } = useRedux();
+  const {userProfile} = useProfile()
 
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
     if (isChannel) {
@@ -25,7 +26,7 @@ const Group = ({ group }: GroupProps) => {
     } else {
       dispatch(getChatUserDetails(id));
     }
-    dispatch(getChatUserConversations(id));
+    dispatch(getChatUserConversations(userProfile._id, id));
     dispatch(changeSelectedChat(id));
   };
 

@@ -15,8 +15,9 @@ export const getFavourites = () => ({
   type: ChatsActionTypes.GET_FAVOURITES,
 });
 
-export const getDirectMessages = () => ({
+export const getDirectMessages = (id: string | number) => ({
   type: ChatsActionTypes.GET_DIRECT_MESSAGES,
+  payload:id
 });
 
 export const getChannels = () => ({
@@ -49,10 +50,18 @@ export const getChatUserDetails = (selectedChat: string | number | null) => ({
 });
 
 export const getChatUserConversations = (
-  selectedChat: string | number | null
+  user1Id: string | number | null,
+  user2Id: string | number | null
 ) => ({
   type: ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
-  payload: selectedChat,
+  payload: {user1Id,user2Id},
+});
+
+export const setChatUserConversation = (
+  data:any
+) => ({
+  type: ChatsActionTypes.SET_CHAT_USER_CONVERSATION,
+  payload: data,
 });
 
 export const setSocket = (

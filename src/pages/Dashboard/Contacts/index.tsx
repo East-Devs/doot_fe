@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // components
 import Loader from "../../../components/Loader";
@@ -24,6 +24,7 @@ import {
 
 //utils
 import { divideByKey, DivideByKeyResultTypes } from "../../../utils";
+import { idText } from "typescript";
 
 interface IndexProps {}
 
@@ -48,6 +49,8 @@ const Index = (props: IndexProps) => {
 
   const [contacts, setContacts] = useState<Array<any>>([]);
   const [contactsData, setContactsData] = useState<Array<any>>([]);
+  const {userProfile} = useProfile()
+
   useEffect(() => {
     if (contactsList.length > 0) {
       setContacts(contactsList);
@@ -107,7 +110,7 @@ const Index = (props: IndexProps) => {
     } else {
       dispatch(getChatUserDetails(id));
     }
-    dispatch(getChatUserConversations(id));
+    dispatch(getChatUserConversations(userProfile._id,id));
     dispatch(changeSelectedChat(id));
   };
 

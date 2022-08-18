@@ -4,7 +4,7 @@ import classnames from "classnames";
 import { Badge } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import {
@@ -20,6 +20,7 @@ interface GroupProps {
 const Member = ({ member }: GroupProps) => {
   // global store
   const { dispatch } = useRedux();
+  const {userProfile} = useProfile()
 
   const fullName = `${member.firstName} ${member.lastName}`;
   const shortName = `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`;
@@ -41,7 +42,7 @@ const Member = ({ member }: GroupProps) => {
     } else {
       dispatch(getChatUserDetails(id));
     }
-    dispatch(getChatUserConversations(id));
+    dispatch(getChatUserConversations(userProfile._id,id));
     dispatch(changeSelectedChat(id));
   };
 

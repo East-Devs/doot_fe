@@ -14,7 +14,7 @@ const postJwtForgetPwd = (data: any) =>
 
 const postFakeLogin = (data: any) => { 
   //safyan
-  debugger;
+  // debugger;
   return axios.post( 'http://localhost:8000/api/auth/login', data);
   // return api.create(url.POST_FAKE_LOGIN, data);
 }

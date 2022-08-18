@@ -90,7 +90,9 @@ const Login = (props: LoginProps) => {
   } = methods;
 
   const onSubmitForm = (values: object) => {
-    dispatch(loginUser(values));
+    //safyan
+    dispatch(loginUser({user:values}));
+    // dispatch(loginUser(values));
   };
 
   const { userProfile, loading } = useProfile();

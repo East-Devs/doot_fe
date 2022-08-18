@@ -8,7 +8,7 @@ export const INIT_STATE: ChatsState = {
   selectedChat: null,
   chatUserDetails: {},
   chatUserConversations: {
-    messages: {},
+    messages: [],
   },
   isOpenUserDetails: false,
   channelDetails: {},
@@ -75,13 +75,6 @@ const Chats = (state = INIT_STATE, action: any) => {
             isUserMessageSent: false,
             isMessageDeleted: false,
             isMessageForwarded: false,
-          };
-        case ChatsActionTypes.SET_CHAT_USER_CONVERSATION:
-          return {
-            ...state,
-            chatUserConversations: {
-              ...state.chatUserConversations,
-              messages:[action.payload]},
           };
         case ChatsActionTypes.ON_SEND_MESSAGE:
           return {
@@ -297,6 +290,13 @@ const Chats = (state = INIT_STATE, action: any) => {
         isUserConversationsFetched: false,
         getUserConversationsLoading: true,
         isUserMessageSent: false,
+      };
+    case ChatsActionTypes.SET_CHAT_USER_CONVERSATION:
+      return {
+        ...state,
+        chatUserConversations: {
+          ...state.chatUserConversations,
+          messages:[...(state.chatUserConversations as any).messages,action.payload]},
       };
     case ChatsActionTypes.SET_SOCKET:
       // debugger;

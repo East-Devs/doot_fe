@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
+import { useProfile } from "../../../hooks/index";
 
 // components
 import Loader from "../../../components/Loader";
@@ -18,6 +19,7 @@ interface IndexProps {}
 const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
+  const {userProfile} = useProfile()
 
   const { profileDetails, getProfileLoading, isProfileFetched,user } =
     useAppSelector(state => ({
@@ -29,8 +31,8 @@ const Index = (props: IndexProps) => {
 
   // get user profile details
   useEffect(() => {
-    debugger;
-    dispatch(getProfileDetails(user));
+    // debugger;
+    dispatch(getProfileDetails(userProfile));
   }, [dispatch]);
 
   return (

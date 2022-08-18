@@ -3,8 +3,9 @@ import { STATUS_TYPES } from "../constants";
 import { contacts } from "./contacts";
 import { userChannels } from "./channels";
 export interface UserTypes {
-  id: string | number;
+  _id: string | number;
   firstName: string;
+  fullname?: string | null | undefined;
   lastName: string;
   profileImage?: any;
   status?: STATUS_TYPES;
@@ -22,16 +23,16 @@ let favourites: Array<UserTypes> = [
     },
   },
   {
-    ...contacts[5],
+    ...contacts[3],
     meta: {
       status: STATUS_TYPES.ACTIVE,
     },
   },
   {
-    ...contacts[6],
+    ...contacts[2],
   },
   {
-    ...contacts[7],
+    ...contacts[1],
     meta: {
       status: STATUS_TYPES.ACTIVE,
     },
@@ -40,25 +41,22 @@ let favourites: Array<UserTypes> = [
 
 let directMessages: Array<UserTypes> = [
   {
-    ...contacts[16],
+    ...contacts[1],
   },
   {
-    ...contacts[17],
+    ...contacts[2],
   },
   {
-    ...contacts[8],
+    ...contacts[3],
     meta: {
       unRead: 5,
     },
   },
   {
-    ...contacts[18],
+    ...contacts[1],
   },
   {
     ...contacts[3],
-  },
-  {
-    ...contacts[11],
   },
 ];
 

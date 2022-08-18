@@ -2,7 +2,9 @@
 import { ProfileActionTypes, ProfileState } from "./types";
 
 export const INIT_STATE: ProfileState = {
-  profileDetails: {},
+  profileDetails: {
+    basicDetails:{}
+  },
 };
 
 const Profile = (state = INIT_STATE, action: any) => {
@@ -12,7 +14,9 @@ const Profile = (state = INIT_STATE, action: any) => {
         case ProfileActionTypes.GET_PROFILE_DETAILS:
           return {
             ...state,
-            profileDetails: action.payload.data,
+            profileDetails:{
+              basicDetails: action.payload
+            },
             isProfileFetched: true,
             getProfileLoading: false,
           };
@@ -34,8 +38,13 @@ const Profile = (state = INIT_STATE, action: any) => {
       }
 
     case ProfileActionTypes.GET_PROFILE_DETAILS: {
+      // debugger;
+      // safyan 42 payload added
       return {
         ...state,
+        profileDetails:{
+          basicDetails: action.payload
+        },
         getProfileLoading: true,
         isProfileFetched: false,
       };

@@ -12,7 +12,7 @@ export const profileApiResponseError = (actionType: string, error: string) => ({
 });
 
 export const getProfileDetails = (data:any) => {
-  debugger;
+  // debugger;
   return {
     type: ProfileActionTypes.GET_PROFILE_DETAILS,
     payload:data
