@@ -10,32 +10,22 @@ import { SocketContext } from "../context";
 import { useRedux } from "../hooks";
 
 interface VideoCallModalProps {
-  user: CallItem | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
-  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, callUser, call } = useContext(SocketContext);
+const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
 
-  const { useAppSelector,dispatch } = useRedux();
-  const { selectedChat } = useAppSelector(state => ({
-    selectedChat: state.Chats.selectedChat,
-  }));
-
-  // useEffect(() => {
-  //   console.log('Calling Status', callAccepted, callEnded, userVideo);
-
-  // }, [callAccepted, callEnded])
+  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, call, answerCall } = useContext(SocketContext);
 
   useEffect(() => {
     if(isOpen)
     {
-      let cStream;
+
       navigator.mediaDevices
       .getUserMedia({ video: true, audio: true})
       .then(currentStream => {
-        console.log('Caller Stream', myVideo, currentStream);
+        console.log('Current Stream', myVideo, currentStream);
         setStream(currentStream);
         myVideo.current.srcObject = currentStream;
       })
@@ -45,20 +35,24 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
           deviceId: "XeU8qZBqaTclK8IxIlvGM5xaAgq4nszjOdwQOqE8Svs="
         }})
         .then(currentStream => {
-          console.log('Caller Stream', myVideo, currentStream);
+          console.log('Current Stream', myVideo, currentStream);
           setStream(currentStream);
           myVideo.current.srcObject = currentStream;
         })
-        .catch((err) => {
-          alert(`Failed to get any stmrea ${err}`);
-        })
-      }).finally(()=>{
-        callUser(selectedChat);
       })
+
     }
   }, [isOpen])
 
- 
+  const onAccept = () => {
+    answerCall();
+  }
+
+  useEffect(() => {
+    console.log('The Other User Video',userVideo);
+  },[userVideo.current])
+
+  
   return (
     <Modal
       isOpen={isOpen}
@@ -129,7 +123,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
               </div>
             </div>
 
-            <div className="mt-4">
+            {call.isReceivingCall && callAccepted ? <div className="mt-4">
               <Button
                 color="danger"
                 type="button"
@@ -141,12 +135,27 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
                 </span>
               </Button>
             </div>
+            :
+            <div className="mt-4">
+              <Button
+                color="success"
+                type="button"
+                className="avatar-md call-close-btn rounded-circle"
+                onClick={onAccept}
+              >
+                <span className="avatar-title bg-transparent font-size-24">
+                  <i className="mdi mdi-phone-hangup"></i>
+                </span>
+              </Button>
+            </div>
+
+            }
           </div>
 
           <div className="p-4 bg-primary mt-n4">
             <div className="text-white mt-4 text-center">
               <h5 className="font-size-18 text-truncate mb-0 text-white">
-                {user ? `${user.firstName} ${user.lastName}` : ""}
+                {call.name} is calling
               </h5>
             </div>
           </div>
@@ -156,4 +165,4 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
   );
 };
 
-export default VideoCallModal;
+export default VideoCallAlert;

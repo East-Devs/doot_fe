@@ -5,14 +5,17 @@ import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 import { configureStore } from "./redux/store";
 import { BrowserRouter } from "react-router-dom";
+import {SocketProvider} from './context';
 
 ReactDOM.render(
+  <SocketProvider>
   <Provider store={configureStore({})}>
     <BrowserRouter>
-      <App />
+        <App />
     </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
+  </SocketProvider>,
+  document.getElementById("root") 
 );
 
 // If you want to start measuring performance in your app, pass a function

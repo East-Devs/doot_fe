@@ -9,8 +9,6 @@ import { changelayoutMode } from "./redux/actions";
 
 //Route
 import Routes from "./routes";
-import { ContextProvider } from './context';
-
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper";
 
@@ -53,9 +51,8 @@ const App = () => {
     }
   }, [layoutMode, dispatch]);
 
-  return <ContextProvider>
-    <Routes />
-  </ContextProvider> 
+  return  <Routes />
+      
 };
 
 export default App;

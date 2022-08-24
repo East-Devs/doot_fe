@@ -27,7 +27,8 @@ const createChannel = (data: object) => {
 };
 
 const getChatUserDetails = (id: string | number) => {
-  return api.get(url.GET_CHAT_USER_DETAILS + "/" + id, { params: { id } });
+  console.log('Hmm getting this user', id,`http://localhost:8000/api/users?userId=${id}`);
+  return axios.get(`http://localhost:8000/api/users?userId=${id}`);
 };
 
 const getChatUserConversations = (ids : any) => {

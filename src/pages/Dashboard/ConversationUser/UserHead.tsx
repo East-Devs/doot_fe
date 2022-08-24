@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Row,
   Col,
@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
-import Peer from "simple-peer";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
@@ -31,6 +30,7 @@ import { changeSelectedChat, setStreamInfo } from "../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../constants";
+import { SocketContext } from "../../../context";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -309,43 +309,20 @@ const UserHead = ({
 }: UserHeadProps) => {
   // global store
   const {useAppSelector, dispatch } = useRedux();
-  const { streamInfo,socket } = useAppSelector(state => ({
-    streamInfo: state.Calls.streamInfo,
+  const { socket } = useAppSelector(state => ({
     socket: state.Chats.socket,
+  }));
+  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, callUser, call } = useContext(SocketContext);
+
+  const { selectedChat } = useAppSelector(state => ({
+    selectedChat: state.Chats.selectedChat,
   }));
   /*
     video call modal
     */
   const [isOpenVideoModal, setIsOpenVideoModal] = useState<boolean>(false);
-  
   const onOpenVideo = () => {
     setIsOpenVideoModal(true);
-
-    const peer = new Peer({ initiator: true, trickle: false, stream:streamInfo.myVideo });
-
-		peer.on("signal", (data) => {
-			socket.emit("callUser", {
-				userToCall: chatUserDetails._id,
-				signalData: data,
-				from: 'safyan',
-				name:"safyan",
-			});
-		});
-
-		peer.on("stream", (currentStream) => {
-      dispatch(setStreamInfo({userVideo:currentStream}));
-
-			// userVideo.current.srcObject = currentStream;
-		});
-
-		socket.current.on("callAccepted", (signal:any) => {
-      dispatch(setStreamInfo({callAccepted:true}));
-
-			peer.signal(signal);
-		});
-
-    dispatch(setStreamInfo({peer}));
-		// connectionRef.current = peer;
   };
   const onCloseVideo = () => {
     setIsOpenVideoModal(false);

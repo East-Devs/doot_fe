@@ -46,19 +46,18 @@ const Calls = (state = INIT_STATE, action: any) => {
       };
     }
 
-    case CallsActionTypes.SET_STREAM_INFO: {
-      debugger;
-      console.log("setStreamInfo", action.payload);
-      return {
-        ...state,
-        streamInfo:{myVideo:action.payload},
-        //   ...state.streamInfo,
-        //   ...action.payload
-        // },
-        getCallsLoading: true,
-        isCallsFetched: false,
-      };
-    }
+    // case CallsActionTypes.SET_STREAM_INFO: {
+    //   console.log("setStreamInfo", action.payload);
+    //   return {
+    //     ...state,
+    //     streamInfo:{myVideo:action.payload},
+    //     //   ...state.streamInfo,
+    //     //   ...action.payload
+    //     // },
+    //     getCallsLoading: true,
+    //     isCallsFetched: false,
+    //   };
+    // }
 
     default:
       return { ...state };
