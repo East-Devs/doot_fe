@@ -4,7 +4,7 @@ import classnames from "classnames";
 
 // interface
 import { UserTypes } from "../../../data/chat";
-import { STATUS_TYPES } from "../../../constants";
+import { getProfileImage, STATUS_TYPES } from "../../../constants";
 
 interface ChatUserProps {
   user: UserTypes;
@@ -49,9 +49,10 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
             {user.profileImage ? (
               <>
                 <img
-                  src={user.profileImage}
+                  src={getProfileImage(user.profileImage)}
                   className="rounded-circle avatar-xs"
                   alt=""
+                  crossOrigin="anonymous"
                 />
                 {isOnline && <span className="user-status"></span>}
               </>

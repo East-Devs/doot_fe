@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Button, UncontrolledTooltip, PopoverBody, Popover } from "reactstrap";
+import { Button, UncontrolledTooltip, PopoverBody, Popover, Input, Label } from "reactstrap";
 
 // emoji picker
 import Picker from "emoji-picker-react";
@@ -8,9 +8,11 @@ import Picker from "emoji-picker-react";
 interface StartButtonsProps {
   onToggle: () => void;
   onChange: (value: string) => void;
+  onSelectImages: (images: Array<any>) => void;
+  onSelectFiles: (files: Array<any>) => void;
   text: null | string;
 }
-const StartButtons = ({ onToggle, onChange, text }: StartButtonsProps) => {
+const StartButtons = ({ onToggle, onChange, text, onSelectFiles, onSelectImages }: StartButtonsProps) => {
   /*
   emoji handeling
   */
@@ -23,21 +25,47 @@ const StartButtons = ({ onToggle, onChange, text }: StartButtonsProps) => {
     onChange(text + emojiObject.emoji);
   };
 
+  const onSelect = (e: any) => {
+    const files = [...e.target.files];
+    if (files) {
+      // const src = URL.createObjectURL(files[0]);
+      onSelectImages(files);
+      onToggle();
+    }
+  };
+
+  const onSelectF = (e: any) => {
+    const files = [...e.target.files];
+    if (files) {
+      onSelectFiles(files);
+      onToggle();
+    }
+  };
+
+
   return (
     <div className="chat-input-links me-md-2">
       <div className="links-list-item" id="more-menu">
-        <Button
-          type="button"
-          className="btn btn-link text-decoration-none btn-lg waves-effect"
-          onClick={onToggle}
-          color="none"
-        >
-          <i className="bx bx-dots-horizontal-rounded align-middle"></i>
-        </Button>
-      </div>
-      <UncontrolledTooltip target="more-menu" placement="top">
-        More
-      </UncontrolledTooltip>
+        <div>
+          <Input
+            id="attachedfile-input"
+            type="file"
+            className="d-none"
+            onChange={(e: any) => onSelectF(e)}
+          />
+          <Label
+            htmlFor="attachedfile-input"
+            className="avatar-sm mx-auto"
+          >
+            <span className="avatar-title font-size-18 rounded-circle">
+              <i className="bx bx-paperclip"></i>
+            </span>
+          </Label>
+        </div>
+        <UncontrolledTooltip target="more-menu" placement="top">
+        Attach
+        </UncontrolledTooltip>
+      </div> 
       <div className="links-list-item" id="emoji">
         <Button
           type="button"

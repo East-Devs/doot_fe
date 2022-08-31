@@ -8,11 +8,8 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 
-//images
-import imagePlaceholder from "../../../assets/images/users/profile-placeholder.png";
-
 // constants
-import { STATUS_TYPES } from "../../../constants";
+import { BACKEND_URL, getProfileImage, STATUS_TYPES } from "../../../constants";
 interface ProfileUserProps {
   onCloseUserDetails: () => any;
   chatUserDetails: any;
@@ -28,20 +25,13 @@ const ProfileUser = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const profile = chatUserDetails.profileImage
-    ? chatUserDetails.profileImage
-    : imagePlaceholder;
-  const fullName =
-    chatUserDetails.name === undefined
-      ? chatUserDetails.firstName
-        ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-        : "-"
-      : chatUserDetails.name;
+  const profile = getProfileImage(chatUserDetails.profileImage);
+  const fullName = chatUserDetails?.fullname;
 
   return (
     <div className="p-3 border-bottom">
       <div className="user-profile-img">
-        <img src={profile} className="profile-img rounded" alt="" />
+        <img src={profile} className="profile-img rounded" alt={fullName} crossOrigin="anonymous" />
         <div className="overlay-content rounded">
           <div className="user-chat-nav p-2">
             <div className="d-flex w-100">
@@ -63,7 +53,7 @@ const ProfileUser = ({
                   <i className="bx bx-left-arrow-alt"></i>
                 </Button>
               </div>
-              <div className="flex-shrink-0">
+              {/* <div className="flex-shrink-0">
                 <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                   <DropdownToggle
                     color="none"
@@ -113,7 +103,7 @@ const ProfileUser = ({
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="mt-auto p-3">

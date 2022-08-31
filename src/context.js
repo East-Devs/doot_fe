@@ -1,10 +1,11 @@
 import React, { createContext, useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
 import Peer from "simple-peer";
+import { BACKEND_URL } from "./constants";
 
 const SocketContext = createContext();
 
-const socket = io("http://localhost:8000");
+const socket = io(BACKEND_URL);
 // const socket = io("https://warm-wildwood-81069.herokuapp.com");
 
 const SocketProvider = ({ children }) => {
@@ -25,13 +26,19 @@ const SocketProvider = ({ children }) => {
     });
 
     socket.on("callUser", ({ from, name: callerName, signal }) => {
-      console.log(`Rec call from ${callerName}`);
+      console.log(`Rec call from ${callerName}`, from);
       setCall({
         isReceivingCall: true,
         from,
         name: callerName,
         signal: signal,
       });
+    });
+
+    socket.on("callEnded", ({ from }) => {
+      // console.log("Call Ended", call.from, from);
+      // if (call.from == from)
+      leaveCall();
     });
   }, []);
 
@@ -97,11 +104,19 @@ const SocketProvider = ({ children }) => {
     connectionRef.current = peer;
   };
 
+  const updateVideoStatus = status => {
+    stream.getVideoTracks().forEach(track => (track.enabled = status));
+  };
+
+  const updateAudioStatus = status => {
+    stream.getAudioTracks().forEach(track => (track.enabled = status));
+  };
+
   const leaveCall = () => {
     setCallEnded(true);
-    setCall({});
+    setCall({ from: call.from });
 
-    connectionRef.current.destroy();
+    connectionRef.current?.destroy();
 
     window.location.reload();
   };
@@ -121,6 +136,8 @@ const SocketProvider = ({ children }) => {
         answerCall,
         setStream,
         socket,
+        updateVideoStatus,
+        updateAudioStatus,
       }}
     >
       {children}

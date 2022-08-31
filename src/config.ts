@@ -1,5 +1,7 @@
+import { BACKEND_URL } from "./constants";
+
 const config = {
-  API_URL: "http://localhost:8000/",
+  API_URL: `${BACKEND_URL}/`,
   AUTH_BACKEND: "Dummy",
   FIRE_BASE: {
     API_KEY: process.env.REACT_APP_APIKEY,

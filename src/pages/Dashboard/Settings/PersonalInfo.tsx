@@ -35,12 +35,12 @@ const PersonalInfo = ({ basicDetails }: PersonalInfoProps) => {
         </h5>
       </div>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <p className="text-muted mb-1">Location</p>
         <h5 className="font-size-14 mb-0">
           {basicDetails && basicDetails.location ? basicDetails.location : "-"}
         </h5>
-      </div>
+      </div> */}
     </div>
   );
 };

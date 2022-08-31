@@ -29,7 +29,7 @@ import { PinTypes } from "../../../data/chat";
 import { changeSelectedChat, setStreamInfo } from "../../../redux/actions";
 
 // constants
-import { STATUS_TYPES } from "../../../constants";
+import { getProfileImage, STATUS_TYPES } from "../../../constants";
 import { SocketContext } from "../../../context";
 interface ProfileImageProps {
   chatUserDetails: any;
@@ -43,16 +43,14 @@ const ProfileImage = ({
   onOpenUserDetails,
   isChannel,
 }: ProfileImageProps) => {
-  const fullName = !isChannel
-    ? chatUserDetails.firstName
-      ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-      : "-"
+  const fullName = !isChannel?
+    chatUserDetails.fullname
     : chatUserDetails.name;
   const shortName = !isChannel
-    ? chatUserDetails.firstName
-      ? `${chatUserDetails.firstName.charAt(
+    ? chatUserDetails.fullname
+      ? `${chatUserDetails.fullname.charAt(
           0
-        )}${chatUserDetails.lastName.charAt(0)}`
+        )}${chatUserDetails.fullname.charAt(0)}`
       : "-"
     : "#";
 
@@ -68,7 +66,7 @@ const ProfileImage = ({
   const [color] = useState(Math.floor(Math.random() * colors.length));
 
   const isOnline =
-    chatUserDetails.status && chatUserDetails.status === STATUS_TYPES.ACTIVE;
+    !!chatUserDetails.socketId ? STATUS_TYPES.ACTIVE : STATUS_TYPES.AWAY;
 
   const members = (chatUserDetails.members || []).length;
   return (
@@ -97,9 +95,10 @@ const ProfileImage = ({
             {chatUserDetails.profileImage ? (
               <>
                 <img
-                  src={chatUserDetails.profileImage}
+                  src={getProfileImage(chatUserDetails.profileImage)}
                   className="rounded-circle avatar-sm"
                   alt=""
+                  crossOrigin="anonymous"
                 />
                 <span
                   className={classnames(
@@ -312,11 +311,14 @@ const UserHead = ({
   const { socket } = useAppSelector(state => ({
     socket: state.Chats.socket,
   }));
-  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, callUser, call } = useContext(SocketContext);
+  const {  leaveCall } = useContext(SocketContext);
 
-  const { selectedChat } = useAppSelector(state => ({
+  const { selectedChat, directMessages } = useAppSelector(state => ({
     selectedChat: state.Chats.selectedChat,
+    directMessages: state.Chats.directMessages
   }));
+
+  const currentChatUser = directMessages.find((u: any) => u._id == selectedChat);
   /*
     video call modal
     */
@@ -326,6 +328,7 @@ const UserHead = ({
   };
   const onCloseVideo = () => {
     setIsOpenVideoModal(false);
+    leaveCall();
   };
 
   /*
@@ -371,9 +374,9 @@ const UserHead = ({
         </Col>
         <Col sm={8} className="col-4">
           <ul className="list-inline user-chat-nav text-end mb-0">
-            <li className="list-inline-item">
+            {/* <li className="list-inline-item">
               <Search />
-            </li>
+            </li> */}
 
             {!isChannel && (
               <>
@@ -411,7 +414,7 @@ const UserHead = ({
               </button>
             </li>
 
-            <li className="list-inline-item">
+            {/* <li className="list-inline-item">
               <More
                 onOpenAudio={onOpenAudio}
                 onOpenVideo={onOpenVideo}
@@ -419,11 +422,11 @@ const UserHead = ({
                 isArchive={chatUserDetails.isArchived}
                 onToggleArchive={onToggleArchive}
               />
-            </li>
+            </li> */}
           </ul>
         </Col>
       </Row>
-      <PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />
+      {/* <PinnedAlert onOpenPinnedTab={onOpenPinnedTab} /> */}
       {isOpenAudioModal && (
         <AudioCallModal
           isOpen={isOpenAudioModal}

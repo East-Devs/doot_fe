@@ -215,7 +215,7 @@ const {userProfile} = useProfile()
               </UncontrolledTooltip>
             </div>
           </div>
-          <Form>
+          {/* <Form>
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -232,7 +232,7 @@ const {userProfile} = useProfile()
                 <i className="bx bx-search align-middle"></i>
               </Button>
             </div>
-          </Form>
+          </Form> */}
         </div>{" "}
         {/* .p-4 */}
         <AppSimpleBar className="chat-room-list">
@@ -240,11 +240,11 @@ const {userProfile} = useProfile()
           {active === CHATS_TABS.DEFAULT && (
             <>
               {/* favourite */}
-              <Favourites
+              {/* <Favourites
                 users={favourites}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
-              />
+              /> */}
 
               {/* direct messages */}
               <DirectMessages
@@ -261,7 +261,7 @@ const {userProfile} = useProfile()
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
               />
-              <h5 className="text-center mb-2">
+              {/* <h5 className="text-center mb-2">
                 <Link
                   to="#"
                   className="mb-3 px-4 mt-4 font-size-11 text-primary"
@@ -270,10 +270,10 @@ const {userProfile} = useProfile()
                   Archived Contacts{" "}
                   <i className="bx bxs-archive-in align-middle" />
                 </Link>
-              </h5>
+              </h5> */}
             </>
           )}
-          {active === CHATS_TABS.ARCHIVE && (
+          {/* {active === CHATS_TABS.ARCHIVE && (
             <>
               <Archive
                 archiveContacts={archiveContacts}
@@ -290,7 +290,7 @@ const {userProfile} = useProfile()
                 </Link>
               </h5>
             </>
-          )}
+          )} */}
 
           {/* End chat-message-list */}
         </AppSimpleBar>

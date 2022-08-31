@@ -34,16 +34,20 @@ const Index = ({ isChannel }: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
-    chatUserDetails,
+    directMessages,
     getUserDetailsLoading,
     isOpenUserDetails,
     isFavouriteContactToggled,
+    selectedChat
   } = useAppSelector(state => ({
-    chatUserDetails: state.Chats.chatUserDetails,
+    directMessages: state.Chats.directMessages,
     getUserDetailsLoading: state.Chats.getUserDetailsLoading,
     isOpenUserDetails: state.Chats.isOpenUserDetails,
     isFavouriteContactToggled: state.Chats.isFavouriteContactToggled,
+    selectedChat: state.Chats.selectedChat,
   }));
+
+  const chatUserDetails = directMessages.find((u: any) => u._id == selectedChat);
 
   useEffect(() => {
     if (isFavouriteContactToggled) {
@@ -116,20 +120,20 @@ const Index = ({ isChannel }: IndexProps) => {
           <AppSimpleBar className="p-4 user-profile-desc">
             {" "}
             {/* simplebar */}
-            <Actions
+            {/* <Actions
               chatUserDetails={chatUserDetails}
               onOpenVideo={onOpenVideo}
               onOpenAudio={onOpenAudio}
               onToggleFavourite={onToggleFavourite}
               onToggleArchive={onToggleArchive}
-            />
-            <Status about={chatUserDetails.about} />
+            /> */}
+            {/* <Status about={chatUserDetails.about} /> */}
             {!isChannel ? (
               <>
                 <BasicDetails chatUserDetails={chatUserDetails} />
                 <hr className="my-4" />
-                <Groups chatUserDetails={chatUserDetails} />
-                <hr className="my-4" />
+                {/* <Groups chatUserDetails={chatUserDetails} />
+                <hr className="my-4" /> */}
               </>
             ) : (
               <>
@@ -137,9 +141,9 @@ const Index = ({ isChannel }: IndexProps) => {
                 <hr className="my-4" />
               </>
             )}
-            <Media media={chatUserDetails.media} limit={3} />
+            {/* <Media media={chatUserDetails.media} limit={3} />
             <hr className="my-4" />
-            <AttachedFiles attachedFiles={chatUserDetails.attachedFiles} />
+            <AttachedFiles attachedFiles={chatUserDetails.attachedFiles} /> */}
           </AppSimpleBar>
           {/* <!-- end user-profile-desc --> */}
           {isOpenAudioModal && (

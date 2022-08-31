@@ -46,7 +46,8 @@ const Index = ({ isChannel }: IndexProps) => {
     isMessageForwarded,
     isUserMessagesDeleted,
     isImageDeleted,
-    socket
+    socket,
+    directMessages
   } = useAppSelector(state => ({
     chatUserDetails: state.Chats.chatUserDetails,
     selectedChat: state.Chats.selectedChat,
@@ -56,7 +57,8 @@ const Index = ({ isChannel }: IndexProps) => {
     isMessageForwarded: state.Chats.isMessageForwarded,
     isUserMessagesDeleted: state.Chats.isUserMessagesDeleted,
     isImageDeleted: state.Chats.isImageDeleted,
-    socket:state.Chats.socket
+    socket:state.Chats.socket,
+    directMessages: state.Chats.directMessages
   }));
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
@@ -77,6 +79,9 @@ const Index = ({ isChannel }: IndexProps) => {
     setReplyData(reply);
   };
 
+  console.log('Chat users', directMessages, directMessages.find((u: any) => u._id == selectedChat));
+  
+  const currentChatUser = directMessages.find((u: any) => u._id == selectedChat);
   /*
   send message
   */
@@ -135,21 +140,21 @@ const Index = ({ isChannel }: IndexProps) => {
   ]);
 
   const onDeleteMessage = (messageId: string | number) => {
-    dispatch(deleteMessage(chatUserDetails.id, messageId));
+    dispatch(deleteMessage(chatUserDetails._id, messageId));
   };
 
   const onDeleteUserMessages = () => {
-    dispatch(deleteUserMessages(chatUserDetails.id));
+    dispatch(deleteUserMessages(currentChatUser._id));
   };
 
   const onToggleArchive = () => {
-    dispatch(toggleArchiveContact(chatUserDetails.id));
+    dispatch(toggleArchiveContact(currentChatUser._id));
   };
 
   return (
     <>
       <UserHead
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={currentChatUser}
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}
@@ -158,7 +163,7 @@ const Index = ({ isChannel }: IndexProps) => {
       />
       <Conversation
         chatUserConversations={chatUserConversations}
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={currentChatUser}
         onDelete={onDeleteMessage}
         onSetReplyData={onSetReplyData}
         isChannel={isChannel}
@@ -167,7 +172,7 @@ const Index = ({ isChannel }: IndexProps) => {
         onSend={onSend}
         replyData={replyData}
         onSetReplyData={onSetReplyData}
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={currentChatUser}
       />
     </>
   );

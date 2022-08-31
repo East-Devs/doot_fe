@@ -10,17 +10,16 @@ const BasicDetails = ({ chatUserDetails }: BasicDetailsProps) => {
 
   return (
     <div className="pb-2">
-      <h5 className="font-size-11 text-uppercase mb-2">Info :</h5>
       <div>
         <div className="d-flex align-items-end">
           <div className="flex-grow-1">
             <p className="text-muted font-size-14 mb-1">Name</p>
           </div>
-          <div className="flex-shrink-0">
+          {/* <div className="flex-shrink-0">
             <button type="button" className="btn btn-sm btn-soft-primary">
               Edit
             </button>
-          </div>
+          </div> */}
         </div>
         <h5 className="font-size-14">{fullName}</h5>
       </div>
@@ -32,12 +31,12 @@ const BasicDetails = ({ chatUserDetails }: BasicDetailsProps) => {
         </h5>
       </div>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <p className="text-muted font-size-14 mb-1">Location</p>
         <h5 className="font-size-14 mb-0">
           {chatUserDetails.location ? chatUserDetails.location : "-"}
         </h5>
-      </div>
+      </div> */}
     </div>
   );
 };

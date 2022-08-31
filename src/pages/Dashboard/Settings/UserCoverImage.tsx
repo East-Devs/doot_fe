@@ -3,14 +3,13 @@ import { Label, UncontrolledTooltip } from "reactstrap";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
+import image4 from "../../../assets/images/small/img-4.jpg";
 
 interface UserCoverImageProps {
   basicDetails: BasicDetailsTypes;
 }
 const UserCoverImage = ({ basicDetails }: UserCoverImageProps) => {
-  const [image, setImage] = useState<string>(
-    basicDetails && basicDetails.coverImage
-  );
+  const [image, setImage] = useState<string>(image4);
   useEffect(() => {
     if (basicDetails && basicDetails.coverImage) {
       setImage(basicDetails.coverImage);
@@ -38,7 +37,7 @@ const UserCoverImage = ({ basicDetails }: UserCoverImageProps) => {
               <div className="flex-grow-1">
                 <h5 className="text-white mb-0">Settings</h5>
               </div>
-              <div className="flex-shrink-0">
+              {/* <div className="flex-shrink-0">
                 <div
                   className="avatar-xs p-0 rounded-circle profile-photo-edit"
                   id="change-cover"
@@ -62,7 +61,7 @@ const UserCoverImage = ({ basicDetails }: UserCoverImageProps) => {
                 <UncontrolledTooltip target="change-cover" placement="bottom">
                   Change Background
                 </UncontrolledTooltip>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

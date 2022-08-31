@@ -117,7 +117,10 @@ const Index = ({
       >
         <div className="row g-0 align-items-center">
           <div className="col-auto">
+            
             <StartButtons
+              onSelectImages={onSelectImages}
+              onSelectFiles={onSelectFiles}
               onToggle={onToggle}
               text={text}
               onChange={onChangeText}
@@ -150,13 +153,6 @@ const Index = ({
           </p>
         </Alert>
       ) : null}
-
-      <MoreMenu
-        isOpen={isOpen}
-        onSelectImages={onSelectImages}
-        onSelectFiles={onSelectFiles}
-        onToggle={onToggle}
-      />
 
       <Reply
         reply={replyData}

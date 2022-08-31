@@ -15,6 +15,7 @@ import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
 import { setChatUserConversation, setSocket, setStreamInfo } from "../../redux/actions";
 import { SocketContext } from "../../context";
+import VideoCallModal from "../../components/VideoCallModal";
 import VideoCallAlert from "../../components/VideoCallAlert";
 
 interface IndexProps {}
@@ -85,7 +86,7 @@ const Index = (props: IndexProps) => {
           <Welcome />
         )}
 
-        <VideoCallAlert isOpen={call.isReceivingCall } onClose={onClose}/>
+        <VideoCallAlert user={userProfile} isOpen={call.isReceivingCall } onClose={onClose}/>
       </div>
     </>
   );

@@ -32,8 +32,8 @@ const Chats = (state = INIT_STATE, action: any) => {
             ...state,
             directMessages: action.payload.data.map((item: any) =>  ({
               ...item,
-              firstName:item.email,
-              lastName:item.email
+              firstName: item.firstName ?? item.email,
+              lastName: item.lastName ?? item.email
             })),
             isDirectMessagesFetched: true,
             getDirectMessagesLoading: false,

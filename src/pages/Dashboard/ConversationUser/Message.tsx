@@ -27,6 +27,7 @@ import { useProfile } from "../../../hooks";
 // utils
 import { formateDate } from "../../../utils";
 import RepliedMessage from "./RepliedMessage";
+import { getProfileImage } from "../../../constants";
 
 interface MenuProps {
   onDelete: () => any;
@@ -159,7 +160,7 @@ const Image = ({ image, onImageClick, index, onDeleteImg }: ImageProps) => {
           to={"#"}
           onClick={() => onImageClick(index)}
         >
-          <img src={image.downloadLink} alt="" className="rounded border" />
+          <img src={image.downloadLink} alt="" className="rounded border" crossOrigin="anonymous"/>
         </Link>
       </div>
       <ImageMoreMenu onDelete={onDelete} />
@@ -290,20 +291,13 @@ const Message = ({
   const hasText = message.text;
   const isTyping = false;
 
-  const chatUserFullName = chatUserDetails.firstName
-    ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
+  const chatUserFullName = chatUserDetails.fullname
+    ? `${chatUserDetails.fullname}`
     : "-";
 
-  const myProfile = userProfile.profileImage
-    ? userProfile.profileImage
-    : imagePlaceholder;
-  const channeluserProfile =
-    message?.meta?.userData && message?.meta?.userData?.profileImage
-      ? message.meta.userData.profileImage
-      : imagePlaceholder;
-  const chatUserprofile = chatUserDetails.profileImage
-    ? chatUserDetails.profileImage
-    : imagePlaceholder;
+  const myProfile = getProfileImage(userProfile.profileImage);
+  const channeluserProfile = getProfileImage(message?.meta?.userData?.profileImage);
+  const chatUserprofile = getProfileImage(chatUserDetails.profileImage);
   const profile = isChannel ? channeluserProfile : chatUserprofile;
   // const date = formateDate(message.time, "hh:mmaaa");
   // safyan
@@ -311,7 +305,7 @@ const Message = ({
   const isSent = message?.meta?.sent || true;
   const isReceived = message?.meta?.received || true;
   const isRead = message?.meta?.read || true;
-  const isForwarded = message?.meta?.isForwarded || true;
+  const isForwarded = message?.meta?.isForwarded || false;
   const channdelSenderFullname = message?.meta?.userData
     ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
     : "-";
@@ -342,7 +336,7 @@ const Message = ({
     >
       <div className="conversation-list">
         <div className="chat-avatar">
-          <img src={isFromMe ? myProfile : profile} alt="" />
+          <img src={isFromMe ? myProfile : profile} alt="" crossOrigin="anonymous"/>
         </div>
 
         <div className="user-chat-content">
@@ -353,7 +347,7 @@ const Message = ({
               </div>
             </div>
           )}
-          {isForwarded && (
+          {/* {isForwarded && (
             <span
               className={classnames(
                 "me-1",
@@ -373,7 +367,7 @@ const Message = ({
               ></i>
               Forwarded
             </span>
-          )}
+          )} */}
 
           <div className="ctext-wrap">
             {/* text message end */}
@@ -408,11 +402,11 @@ const Message = ({
                   )}
                   {/* files message end */}
                 </div>
-                <Menu
+                {/* <Menu
                   onForward={onForwardMessage}
                   onDelete={onDeleteMessage}
                   onReply={onClickReply}
-                />
+                /> */}
               </>
             )}
 
@@ -421,7 +415,7 @@ const Message = ({
           <div className="conversation-name">
             {isFromMe ? (
               <>
-                <span
+                {/* <span
                   className={classnames(
                     "me-1",
                     { "text-success": isRead },
@@ -435,7 +429,7 @@ const Message = ({
                       { "bx-check": isSent }
                     )}
                   ></i>
-                </span>
+                </span> */}
                 <small className={classnames("text-muted", "mb-0", "me-2")}>
                   {date}
                 </small>

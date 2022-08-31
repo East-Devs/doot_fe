@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BACKEND_URL } from "../constants";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -15,7 +16,7 @@ const postJwtForgetPwd = (data: any) =>
 const postFakeLogin = (data: any) => { 
   //safyan
   // debugger;
-  return axios.post( 'http://localhost:8000/api/auth/login', data);
+  return axios.post( `${BACKEND_URL}/api/auth/login`, data);
   // return api.create(url.POST_FAKE_LOGIN, data);
 }
 const postJwtLogin = (data: any) => {

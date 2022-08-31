@@ -13,6 +13,7 @@ import { DivideByKeyResultTypes } from "../../../utils";
 
 // interfaaces
 import { ContactTypes } from "../../../data/contacts";
+import { getProfileImage } from "../../../constants";
 
 interface ContactItemProps {
   contact: ContactTypes;
@@ -45,9 +46,10 @@ const ContactItem = ({ contact, onSelectChat }: ContactItemProps) => {
           <div className="avatar-xs">
             {contact.profileImage ? (
               <img
-                src={contact.profileImage}
+                src={getProfileImage(contact.profileImage)}
                 alt=""
                 className="img-fluid rounded-circle"
+                crossOrigin="anonymous"
               />
             ) : (
               <span

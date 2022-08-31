@@ -13,13 +13,13 @@ import {
 } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../hooks/index";
+import { useProfile, useRedux } from "../../hooks/index";
 
 // actions
 import { changeTab } from "../../redux/actions";
 
 // costants
-import { TABS } from "../../constants/index";
+import { getProfileImage, TABS } from "../../constants/index";
 import LightDarkMode from "../../components/LightDarkMode";
 
 //images
@@ -130,6 +130,8 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
+  const {userProfile} = useProfile();
+
   return (
     <Dropdown
       nav
@@ -138,15 +140,15 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
       toggle={toggle}
     >
       <DropdownToggle nav className="bg-transparent">
-        <img src={avatar1} alt="" className="profile-user rounded-circle" />
+        <img src={getProfileImage(userProfile.profileImage)} alt="" className="profile-user rounded-circle" crossOrigin="anonymous" />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex align-items-center justify-content-between"
           onClick={() => onChangeTab(TABS.USERS)}
         >
           Profile <i className="bx bx-user-circle text-muted ms-1"></i>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
           onClick={() => onChangeTab(TABS.SETTINGS)}

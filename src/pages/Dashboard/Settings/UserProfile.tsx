@@ -9,12 +9,11 @@ import {
 import classnames from "classnames";
 
 // interface
-import { BasicDetailsTypes } from "../../../data/settings";
 
 // CONSTANTS
-import { STATUS_TYPES } from "../../../constants";
+import { getProfileImage, STATUS_TYPES } from "../../../constants";
 interface UserProfileProps {
-  basicDetails: BasicDetailsTypes;
+  basicDetails: any;
   status: STATUS_TYPES;
 }
 const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
@@ -26,11 +25,11 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
     profile image
     */
   const [image, setImage] = useState<string>(
-    basicDetails && basicDetails.profile
+    getProfileImage(basicDetails.profileImage)
   );
   useEffect(() => {
-    if (basicDetails && basicDetails.profile) {
-      setImage(basicDetails.profile);
+    if (basicDetails && basicDetails.profileImage) {
+      setImage( getProfileImage(basicDetails.profileImage));
     }
   }, [basicDetails]);
   const onChangeProfile = (e: any) => {
@@ -67,6 +66,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
           src={image}
           className="rounded-circle avatar-lg img-thumbnail user-profile-image"
           alt="user-profile"
+          crossOrigin="anonymous"
         />
         <div className="avatar-xs p-0 rounded-circle profile-photo-edit">
           <input
@@ -89,7 +89,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
 
       <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
 
-      <Dropdown
+      {/* <Dropdown
         className="d-inline-block"
         isOpen={dropdownOpen}
         toggle={toggle}
@@ -125,7 +125,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
             Do not disturb
           </DropdownItem>
         </DropdownMenu>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   );
 };

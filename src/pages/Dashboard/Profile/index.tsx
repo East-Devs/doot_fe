@@ -27,7 +27,7 @@ const Index = (props: IndexProps) => {
       getProfileLoading: state.Profile.getProfileLoading,
       isProfileFetched: state.Profile.isProfileFetched,
       user: state.Login.user,
-    }));
+    }))
 
   // get user profile details
   useEffect(() => {
@@ -37,18 +37,18 @@ const Index = (props: IndexProps) => {
 
   return (
     <div className="position-relative">
-      {getProfileLoading && !isProfileFetched && <Loader />}
-      <MyProfile basicDetails={profileDetails.basicDetails} />
+      {/* {userProfile && !isProfileFetched && <Loader />} */}
+      <MyProfile basicDetails={userProfile} />
 
       <AppSimpleBar className="p-4 profile-desc">
-        <UserDescription basicDetails={profileDetails.basicDetails} />
+        <UserDescription basicDetails={userProfile} />
         <hr className="my-4" />
 
-        <Media media={profileDetails.media} limit={2} />
+        {/* <Media media={profileDetails.media} limit={2} />
 
         <hr className="my-4" />
 
-        <AttachedFiles attachedFiles={profileDetails.attachedFiles} />
+        <AttachedFiles attachedFiles={profileDetails.attachedFiles} /> */}
       </AppSimpleBar>
     </div>
   );

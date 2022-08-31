@@ -3,7 +3,7 @@ import { Button, Collapse } from "reactstrap";
 import classnames from "classnames";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import { getSettings, updateSettings } from "../../../redux/actions";
@@ -104,6 +104,7 @@ interface IndexProps {}
 const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
+  const {userProfile} = useProfile()
 
   const { settingsData, getSettingsLoading } = useAppSelector(state => ({
     settingsData: state.Settings.settings,
@@ -145,7 +146,7 @@ const Index = (props: IndexProps) => {
       value: SETTINGS_COLLAPSES.PROFILE,
       label: "Personal Info",
       icon: "bx bxs-user",
-      component: <PersonalInfo basicDetails={settings.basicDetails} />,
+      component: <PersonalInfo basicDetails={userProfile} />,
     },
     {
       value: SETTINGS_COLLAPSES.THEME,
@@ -155,31 +156,31 @@ const Index = (props: IndexProps) => {
         <ThemeSettings theme={settings.theme} onChangeData={onChangeData} />
       ),
     },
-    {
-      value: SETTINGS_COLLAPSES.PRIVACY,
-      label: "Privacy",
-      icon: "bx bxs-lock",
-      component: (
-        <Privacy privacy={settings.privacy} onChangeSettings={onChangeData} />
-      ),
-    },
-    {
-      value: SETTINGS_COLLAPSES.SECURITY,
-      label: "Security",
-      icon: "bx bxs-check-shield",
-      component: (
-        <Security
-          security={settings.security}
-          onChangeSettings={onChangeData}
-        />
-      ),
-    },
-    {
-      value: SETTINGS_COLLAPSES.HELP,
-      label: "Help",
-      icon: "bx bxs-help-circle",
-      component: <Help />,
-    },
+    // {
+    //   value: SETTINGS_COLLAPSES.PRIVACY,
+    //   label: "Privacy",
+    //   icon: "bx bxs-lock",
+    //   component: (
+    //     <Privacy privacy={settings.privacy} onChangeSettings={onChangeData} />
+    //   ),
+    // },
+    // {
+    //   value: SETTINGS_COLLAPSES.SECURITY,
+    //   label: "Security",
+    //   icon: "bx bxs-check-shield",
+    //   component: (
+    //     <Security
+    //       security={settings.security}
+    //       onChangeSettings={onChangeData}
+    //     />
+    //   ),
+    // },
+    // {
+    //   value: SETTINGS_COLLAPSES.HELP,
+    //   label: "Help",
+    //   icon: "bx bxs-help-circle",
+    //   component: <Help />,
+    // },
   ];
 
   const onChangeCollapse = (
@@ -197,10 +198,10 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getSettingsLoading && <Loader />}
-      <UserCoverImage basicDetails={settings.basicDetails} />
+      <UserCoverImage basicDetails={userProfile} />
 
       <UserProfile
-        basicDetails={settings.basicDetails}
+        basicDetails={userProfile}
         status={settings.status}
       />
       {/* Start User profile description */}

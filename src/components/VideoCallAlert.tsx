@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
 
 // interface
@@ -8,15 +8,39 @@ import { CallItem } from "../data/calls";
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { SocketContext } from "../context";
 import { useRedux } from "../hooks";
+import { getProfileImage } from "../constants";
 
 interface VideoCallModalProps {
   isOpen: boolean;
   onClose: () => void;
+  user: any;
 }
 
-const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
+const VideoCallAlert = ({ isOpen, onClose, user }: VideoCallModalProps) => {
 
-  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, call, answerCall } = useContext(SocketContext);
+  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, call, answerCall, updateVideoStatus, updateAudioStatus } = useContext(SocketContext);
+
+
+  const [videoOff, setVideoOff] = useState(false);
+
+  const handleVideoOff = () => {
+    updateVideoStatus(videoOff);
+    setVideoOff(!videoOff);
+  }
+
+  const [audioOff, setAudioOff] = useState(false);
+
+  const handleAudioOff = () => {
+    updateAudioStatus(audioOff);
+    setAudioOff(!audioOff);
+  }
+
+  const [soundOff, setSoundOff] = useState(false);
+
+  const handleSoundOff = () => {
+    setSoundOff(!audioOff);
+  }
+
 
   useEffect(() => {
     if(isOpen)
@@ -47,11 +71,6 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
   const onAccept = () => {
     answerCall();
   }
-
-  useEffect(() => {
-    console.log('The Other User Video',userVideo);
-  },[userVideo.current])
-
   
   return (
     <Modal
@@ -63,16 +82,22 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
       contentClassName="shadow-lg border-0"
     >
       <ModalBody className="p-0">
-        {/* <img
-          src={user && user.profileImage ? user.profileImage : imagePlaceholder}
+      {(!(callAccepted && !callEnded) && stream) && (
+          <>
+
+            <img
+          src={getProfileImage(user.profileImage)}
           alt=""
           className="videocallModal-bg"
-        /> */}
-        {(!(callAccepted && !callEnded) && stream) && (
-        <video playsInline muted ref={myVideo} autoPlay className="videocallModal-bg" />
+          style={{display: !videoOff? 'none' : 'block'}}
+          crossOrigin="anonymous"
+        /> 
+        <video playsInline muted ref={myVideo} autoPlay className="videocallModal-bg" style={{display: videoOff? 'none' : 'block'}}/>
+
+          </>
            )}
       {callAccepted && !callEnded && (
-        <video playsInline ref={userVideo} autoPlay className="videocallModal-bg" />
+        <video playsInline muted={soundOff} ref={userVideo} autoPlay className="videocallModal-bg" />
         )}
         <div className="position-absolute start-0 end-0 bottom-0">
           <div className="text-center">
@@ -82,9 +107,10 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
                   color="light"
                   type="button"
                   className="avatar-sm rounded-circle"
+                  onClick={handleAudioOff}
                 >
                   <span className="avatar-title bg-transparent text-muted font-size-20">
-                    <i className="bx bx-microphone-off"></i>
+                  <i className={`bx bx-microphone${audioOff ? '-off': ''}`}></i>
                   </span>
                 </Button>
               </div>
@@ -93,9 +119,10 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
                   color="light"
                   type="button"
                   className="avatar-sm rounded-circle"
+                  onClick={handleSoundOff}
                 >
                   <span className="avatar-title bg-transparent text-muted font-size-20">
-                    <i className="bx bx-volume-full"></i>
+                    <i className={`bx bx-volume${soundOff ? '': '-full'}`}></i>
                   </span>
                 </Button>
               </div>
@@ -104,13 +131,14 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
                   color="light"
                   type="button"
                   className="avatar-sm rounded-circle"
+                  onClick={handleVideoOff}
                 >
                   <span className="avatar-title bg-transparent text-muted font-size-20">
-                    <i className="bx bx-video-off"></i>
+                    <i className={`bx bx-video${videoOff ? '-off': ''}`}></i>
                   </span>
                 </Button>
               </div>
-              <div className="avatar-md h-auto">
+              {/* <div className="avatar-md h-auto">
                 <Button
                   color="light"
                   type="button"
@@ -120,7 +148,7 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
                     <i className="bx bx-refresh"></i>
                   </span>
                 </Button>
-              </div>
+              </div> */}
             </div>
 
             {call.isReceivingCall && callAccepted ? <div className="mt-4">
@@ -155,7 +183,7 @@ const VideoCallAlert = ({ isOpen, onClose }: VideoCallModalProps) => {
           <div className="p-4 bg-primary mt-n4">
             <div className="text-white mt-4 text-center">
               <h5 className="font-size-18 text-truncate mb-0 text-white">
-                {call.name} is calling
+                {callAccepted? call.name : `${call.name} is calling`}
               </h5>
             </div>
           </div>

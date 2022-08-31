@@ -8,10 +8,11 @@ import {
 } from "reactstrap";
 
 // interface
-import { BasicDetailsTypes } from "../../../data/myProfile";
+import image4 from "../../../assets/images/small/img-4.jpg";
+import { getProfileImage } from "../../../constants";
 
 interface MyProfileProps {
-  basicDetails: BasicDetailsTypes;
+  basicDetails: any;
 }
 const MyProfile = ({ basicDetails }: MyProfileProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -24,9 +25,9 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
   return (
     <>
       <div className="user-profile-img">
-        {basicDetails && basicDetails.coverImage && (
+        {basicDetails && (
           <img
-            src={basicDetails.coverImage}
+            src={image4}
             className="profile-img"
             style={{ height: "160px" }}
             alt=""
@@ -40,7 +41,7 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
                 <div className="flex-grow-1">
                   <h5 className="text-white mb-0">My Profile</h5>
                 </div>
-                <div className="flex-shrink-0">
+                {/* <div className="flex-shrink-0">
                   <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                     <DropdownToggle
                       color="none"
@@ -73,7 +74,7 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
                       </DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -82,11 +83,12 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
 
       <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
         <div className="mb-lg-3 mb-2">
-          {basicDetails && basicDetails.coverImage && (
+          {basicDetails && (
             <img
-              src={basicDetails.avatar}
+              src={getProfileImage(basicDetails.profileImage)}
               className="rounded-circle avatar-lg img-thumbnail"
               alt=""
+              crossOrigin="anonymous"
             />
           )}
         </div>

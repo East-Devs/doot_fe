@@ -1,22 +1,11 @@
 import React from "react";
 
-// interface
-import { BasicDetailsTypes } from "../../../data/myProfile";
-
 interface UserDescriptionProps {
-  basicDetails: BasicDetailsTypes;
+  basicDetails: any;
 }
 const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
   return (
     <>
-      <div className="text-muted">
-        <p className="mb-4">
-          {basicDetails && basicDetails.description
-            ? basicDetails.description
-            : "-"}
-        </p>
-      </div>
-
       <div>
         <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">
@@ -24,8 +13,8 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
           </div>
           <div className="flex-grow-1">
             <p className="mb-0">
-              {basicDetails && basicDetails.fullName
-                ? basicDetails.fullName
+              {basicDetails && basicDetails.fullname
+                ? basicDetails.fullname
                 : "-"}
             </p>
           </div>
@@ -33,7 +22,7 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
 
         <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">
-            <i className="bx bx-message-rounded-dots align-middle text-muted"></i>
+            <i className="bx bx-envelope align-middle text-muted"></i>
           </div>
           <div className="flex-grow-1">
             <p className="mb-0">
@@ -42,7 +31,7 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
           </div>
         </div>
 
-        <div className="d-flex py-2">
+        {/* <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">
             <i className="bx bx-location-plus align-middle text-muted"></i>
           </div>
@@ -53,7 +42,7 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
                 : "-"}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -13,6 +13,7 @@ import {
   getChatUserConversations,
   changeSelectedChat,
 } from "../../../redux/actions";
+import { getProfileImage } from "../../../constants";
 
 interface GroupProps {
   member: any;
@@ -61,9 +62,10 @@ const Member = ({ member }: GroupProps) => {
                 )}
               >
                 <img
-                  src={member.profileImage}
+                  src={getProfileImage(member.profileImage)}
                   className="rounded-circle avatar-xs"
                   alt=""
+                  crossOrigin="anonymous"
                 />
               </div>
             ) : (

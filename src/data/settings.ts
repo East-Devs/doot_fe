@@ -9,6 +9,7 @@ export interface BasicDetailsTypes {
   coverImage: string;
   email: string;
   location: string;
+  profileImage?: string;
 }
 
 export interface ThemeTypes {

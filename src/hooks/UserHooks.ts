@@ -20,12 +20,12 @@ const useProfile = () => {
   const userProfileSession = getLoggedinUser();
   const [loading] = useState(userProfileSession ? false : true);
   const [userProfile, setUserProfile] = useState(
-    userProfileSession ? { ...userProfileSession, profileImage: image } : null
+    userProfileSession ? { ...userProfileSession } : null
   );
   useEffect(() => {
     const userProfileSession = getLoggedinUser();
     setUserProfile(
-      userProfileSession ? { ...userProfileSession, profileImage: image } : null
+      userProfileSession ? { ...userProfileSession } : null
     );
   }, [image]);
 
