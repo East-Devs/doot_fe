@@ -34,13 +34,25 @@ const SocketProvider = ({ children }) => {
         signal: signal,
       });
     });
-
-    socket.on("callEnded", ({ from }) => {
-      // console.log("Call Ended", call.from, from);
-      // if (call.from == from)
-      leaveCall();
-    });
   }, []);
+
+  useEffect(() => {
+    if (callAccepted)
+      socket.on("callEnded", ({ from }) => {
+        console.log(
+          "Call Ended",
+          from,
+          call.from,
+          callAccepted,
+          from == call.from
+        );
+        if (from == call.from) leaveCall();
+      });
+
+    return () => {
+      socket.off("callEnded");
+    };
+  }, [call, callAccepted]);
 
   const answerCall = () => {
     console.log("Before accept stream", myVideo.current.srcObject);
@@ -64,13 +76,24 @@ const SocketProvider = ({ children }) => {
 
     peer.on("track", (track, stream) => {
       console.log("Caller track", stream);
-      userVideo.current.srcObject = stream;
+      if (userVideo.current) userVideo.current.srcObject = stream;
     });
 
     console.log("The oringal signal rec", call.signal);
     peer.signal(call.signal);
 
     connectionRef.current = peer;
+
+    socket.on("callEnded", ({ from }) => {
+      console.log(
+        "Call Ended",
+        from,
+        call.from,
+        callAccepted,
+        from == call.from
+      );
+      if (from == call.from) leaveCall();
+    });
   };
 
   const callUser = id => {
@@ -95,8 +118,9 @@ const SocketProvider = ({ children }) => {
       userVideo.current.srcObject = currentStream;
     });
 
-    socket.on("callAccepted", ({ signal }) => {
-      console.log("Accepted the call", signal);
+    socket.on("callAccepted", ({ signal, by }) => {
+      setCall({ from: by });
+      console.log("Accepted the call", signal, by);
       setCallAccepted(true);
       peer.signal(signal);
     });
@@ -113,10 +137,20 @@ const SocketProvider = ({ children }) => {
   };
 
   const leaveCall = () => {
+    if (!callAccepted) return;
     setCallEnded(true);
-    setCall({ from: call.from });
+    setCallAccepted(false);
+    setCall({});
+    // connectionRef.current.off("signal");
+    // connectionRef.current.off("stream");
+    // connectionRef.current.off("track");
+    connectionRef.current.destroy();
 
-    connectionRef.current?.destroy();
+    socket.emit("endCall", { socketId: call.from });
+
+    setTimeout(() => {
+      setCallEnded(false);
+    }, 2000);
 
     window.location.reload();
   };

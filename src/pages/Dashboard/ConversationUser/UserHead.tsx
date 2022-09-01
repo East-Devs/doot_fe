@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -311,7 +311,7 @@ const UserHead = ({
   const { socket } = useAppSelector(state => ({
     socket: state.Chats.socket,
   }));
-  const {  leaveCall } = useContext(SocketContext);
+  const {  leaveCall, callEnded } = useContext(SocketContext);
 
   const { selectedChat, directMessages } = useAppSelector(state => ({
     selectedChat: state.Chats.selectedChat,
@@ -330,6 +330,11 @@ const UserHead = ({
     setIsOpenVideoModal(false);
     leaveCall();
   };
+
+  useEffect(() => {
+    if(callEnded && isOpenVideoModal)
+      onCloseVideo();
+  }, [callEnded])
 
   /*
         audio call modal
