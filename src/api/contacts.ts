@@ -1,13 +1,20 @@
-import { APIClient } from "./apiCore";
-import * as url from "./urls";
+import { BACKEND_URL } from "../constants";
+import { APIClient, getLoggedinUser } from "./apiCore";
+import axios from "axios";
 
-const api = new APIClient();
-
-const getContacts = (filters?: object) => {
-  return api.get(url.GET_CONTACTS, filters);
+const getContacts = async (filters?: object) => {
+  const userProfileSession = getLoggedinUser();
+  return axios.get(
+    `${BACKEND_URL}/api/users/friends/${userProfileSession._id}`
+  );
 };
 
 const inviteContact = (data: object) => {
-  return api.create(url.INVITE_CONTACT, data);
+  const userProfileSession = getLoggedinUser();
+
+  return axios.put(
+    `${BACKEND_URL}/api/users/${userProfileSession._id}/follow`,
+    data
+  );
 };
 export { getContacts, inviteContact };

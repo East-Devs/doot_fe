@@ -230,23 +230,6 @@ const fakeBackend = () => {
   /*
   contacts
   */
-  mock.onGet(url.GET_CONTACTS).reply(config => {
-    return new Promise((resolve, reject) => {
-      if (contacts) {
-        resolve([200, contacts]);
-      } else {
-        reject(["Some thing went wrong!"]);
-      }
-    });
-  });
-
-  mock.onPost(url.INVITE_CONTACT).reply(config => {
-    // const user = JSON.parse(config["data"]);
-
-    return new Promise((resolve, reject) => {
-      resolve([200, "User is Invited"]);
-    });
-  });
 
   /*
   calls
@@ -270,22 +253,6 @@ const fakeBackend = () => {
         resolve([200, bookmarks]);
       } else {
         reject(["Some thing went wrong!"]);
-      }
-    });
-  });
-
-  mock.onDelete(new RegExp(`${url.DELETE_BOOKMARK}/*`)).reply(config => {
-    const { params } = config;
-
-    return new Promise((resolve, reject) => {
-      if (params.id && bookmarks.length !== 0) {
-        const updatedB = bookmarks.filter(
-          (b: any) => b.id + "" !== params.id + ""
-        );
-        onChangeBookmark(updatedB);
-        resolve([200, "Bookmark is Deleted!"]);
-      } else {
-        reject(["Your id is not found"]);
       }
     });
   });
@@ -365,13 +332,6 @@ const fakeBackend = () => {
     return new Promise((resolve, reject) => {
       if (data) {
         let newC: Array<any> = [];
-        for (let index = 0; index < (data || []).length; index++) {
-          const contactId = data[index];
-          const contact = contacts.find((c: any) => c.id + "" === contactId);
-          if (contact) {
-            newC = [...newC, contact];
-          }
-        }
         onChangeDirectMessages([...directMessages, ...newC]);
         resolve([200, "Contacts Added!"]);
       } else {
@@ -399,56 +359,19 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onGet(new RegExp(`${url.GET_CHAT_USER_DETAILS}/*`)).reply(config => {
-    const { params } = config;
-    let data: any;
-    if (params.id && contacts.length !== 0) {
-      const chat = (contacts || []).find(
-        (c: any) => c.id + "" === params.id + ""
-      );
-      if (chat) {
-        data = chat;
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      if (data) {
-        setTimeout(() => {
-          resolve([200, data]);
-        });
-      } else {
-        reject(["Your id is not found"]);
-      }
-    });
-  });
-
-  mock
-    .onGet(new RegExp(`${url.GET_CHAT_USER_CONVERSATIONS}/*`))
-    .reply(config => {
-      const { params } = config;
-
-      let data: any;
-      if (params.id && conversations.length !== 0) {
-        const chat = (conversations || []).find(
-          (c: any) => c.userId + "" === params.id + ""
-        );
-        if (chat) {
-          data = chat;
-        }
-      }
-
-      return new Promise((resolve, reject) => {
-        if (data) {
-          setTimeout(() => {
-            resolve([200, data]);
-          }, 500);
-        } else {
-          setTimeout(() => {
-            reject(["Your id is not found"]);
-          }, 500);
-        }
-      });
-    });
+  // mock.onGet(new RegExp(`${url.GET_CHAT_USER_DETAILS}/*`)).reply(config => {
+  //   const { params } = config;
+  //   let data: any;
+  //   return new Promise((resolve, reject) => {
+  //     if (data) {
+  //       setTimeout(() => {
+  //         resolve([200, data]);
+  //       });
+  //     } else {
+  //       reject(["Your id is not found"]);
+  //     }
+  //   });
+  // });
 
   mock.onPost(url.SEND_MESSAGE).reply(config => {
     const data = JSON.parse(config["data"]);
@@ -569,214 +492,6 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPut(new RegExp(`${url.READ_MESSAGE}/*`)).reply(config => {
-    const data = JSON.parse(config["data"]);
-    let updatedUserC: any;
-    if (data.params && data.params.id && conversations.length !== 0) {
-      let modifiedC = [...conversations];
-      const conversationIdx = (modifiedC || []).findIndex(
-        (c: any) => c.userId + "" === data.params.id + ""
-      );
-      if (conversationIdx > -1) {
-        if (modifiedC[conversationIdx].messages) {
-          modifiedC[conversationIdx].messages = (
-            modifiedC[conversationIdx].messages || []
-          ).map((c: any) => {
-            return {
-              ...c,
-              meta: { ...c.meta, read: true },
-            };
-          });
-        }
-        updatedUserC = modifiedC[conversationIdx];
-        onChangeConversations(modifiedC);
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      if (updatedUserC) {
-        resolve([200, updatedUserC]);
-      } else {
-        setTimeout(() => {
-          reject(["Your id is not found"]);
-        }, 500);
-      }
-    });
-  });
-
-  mock.onGet(new RegExp(`${url.RECEIVE_MESSAGE_FROM_USER}/*`)).reply(config => {
-    let updatedUserC: any;
-    const { params } = config;
-    if (params && params.id && conversations.length !== 0) {
-      let modifiedC = [...conversations];
-      const conversationIdx = (modifiedC || []).findIndex(
-        (c: any) => c.userId + "" === params.id + ""
-      );
-      if (conversationIdx > -1) {
-        if (modifiedC[conversationIdx].messages) {
-          const newM = {
-            ...modifiedC[conversationIdx].messages[
-              modifiedC[conversationIdx].messages.length - 1
-            ],
-          };
-
-          modifiedC[conversationIdx].messages.push({
-            ...newM,
-            mId: newM.mId + new Date().getTime(),
-            meta: {
-              ...newM.meta,
-              receiver: newM.meta.sender,
-              sender: newM.meta.receiver,
-            },
-          });
-        }
-        updatedUserC = modifiedC[conversationIdx];
-        onChangeConversations(modifiedC);
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      if (updatedUserC) {
-        resolve([200, updatedUserC]);
-      } else {
-        setTimeout(() => {
-          reject(["Your id is not found"]);
-        }, 500);
-      }
-    });
-  });
-
-  mock.onDelete(new RegExp(`${url.DELETE_MESSAGE}/*`)).reply(config => {
-    const { params } = config;
-
-    return new Promise((resolve, reject) => {
-      if (params.userId && params.messageId) {
-        let modifiedC = [...conversations];
-        const conversationIdx = (modifiedC || []).findIndex(
-          (c: any) => c.userId + "" === params.userId + ""
-        );
-        if (conversationIdx > -1) {
-          modifiedC[conversationIdx].messages = (
-            modifiedC[conversationIdx].messages || []
-          ).filter((m: any) => m.mId + "" !== params.messageId + "");
-        }
-        onChangeConversations(modifiedC);
-        resolve([200, "Message is Deleted!"]);
-      } else {
-        reject(["Your id is not found"]);
-      }
-    });
-  });
-
-  mock.onPost(url.FORWARD_MESSAGE).reply(config => {
-    const data = JSON.parse(config["data"]);
-    let modifiedC = [...conversations];
-    if (data && data.contacts) {
-      for (let index = 0; index < data.contacts.length; index++) {
-        const c = data.contacts[index];
-        const conversationIdx = (modifiedC || []).findIndex(
-          (con: any) => con.userId + "" === c + ""
-        );
-
-        if (conversationIdx > -1) {
-          const mid =
-            modifiedC[conversationIdx].messages &&
-            modifiedC[conversationIdx].messages.length
-              ? modifiedC[conversationIdx].messages.length + 1
-              : 1;
-          let newM: any = {
-            mId: mid,
-            text: data.message && data.message,
-            time: new Date().toISOString(),
-            meta: {
-              receiver: c,
-              sender: users[0].uid,
-              sent: true,
-              received: false,
-              read: false,
-              isForwarded: true,
-            },
-          };
-          if (data.image && data.image.length) {
-            newM["image"] = data.image;
-          }
-          if (data.attachments && data.attachments.length) {
-            newM["attachments"] = data.attachments;
-          }
-          if (data.forwardedMessage) {
-            newM["replyOf"] = data.forwardedMessage;
-          }
-
-          modifiedC[conversationIdx].messages = [
-            ...modifiedC[conversationIdx].messages,
-            newM,
-          ];
-          modifiedC = [...modifiedC];
-        } else {
-          // new message first time
-          let newM: any = {
-            mId: 1,
-            text: data.message && data.message,
-            time: new Date().toISOString(),
-            meta: {
-              receiver: "614ecab4ac946a9bdafa4e3b",
-              sender: users[0].uid,
-              sent: true,
-              received: false,
-              read: false,
-              isForwarded: true,
-            },
-          };
-          if (data.image && data.image.length) {
-            newM["image"] = data.image;
-          }
-          if (data.attachments && data.attachments.length) {
-            newM["attachments"] = data.attachments;
-          }
-          if (data.forwardedMessage) {
-            newM["replyOf"] = data.forwardedMessage;
-          }
-          const newC = {
-            conversationId: modifiedC.length + 1,
-            userId: c,
-            messages: [
-              {
-                ...newM,
-              },
-            ],
-          };
-          modifiedC = [...modifiedC, newC];
-        }
-      }
-    }
-
-    onChangeConversations(modifiedC);
-    return new Promise((resolve, reject) => {
-      if (data) {
-        resolve([200, "Message is Forwarded!"]);
-      } else {
-        reject(["Your id is not found"]);
-      }
-    });
-  });
-
-  mock.onDelete(new RegExp(`${url.DELETE_USER_MESSAGES}/*`)).reply(config => {
-    const { params } = config;
-
-    return new Promise((resolve, reject) => {
-      if (params.userId) {
-        let modifiedC = [...conversations];
-        modifiedC = (modifiedC || []).filter(
-          (c: any) => c.userId + "" !== params.userId + ""
-        );
-        onChangeConversations(modifiedC);
-        resolve([200, "Messages are Deleted!"]);
-      } else {
-        reject(["Your id is not found"]);
-      }
-    });
-  });
-
   mock.onGet(new RegExp(`${url.GET_CHANNEL_DETAILS}/*`)).reply(config => {
     const { params } = config;
     let data: any;
@@ -807,22 +522,7 @@ const fakeBackend = () => {
     let modifiedC = [...contacts];
     let modifiedF = [...favourites];
     let modifiedD = [...directMessages];
-    if (data.params.id && contacts.length !== 0) {
-      const contactIdx = (modifiedC || []).findIndex(
-        (c: any) => c.id + "" === data.params.id + ""
-      );
-      if (contactIdx > -1) {
-        if (contacts[contactIdx].isFavourite) {
-          contacts[contactIdx].isFavourite = false;
-          modifiedF = modifiedF.filter((f: any) => f.id !== data.params.id);
-          message = "User has been removed to your favourite";
-        } else {
-          contacts[contactIdx].isFavourite = true;
-          modifiedF = [...modifiedF, contacts[contactIdx]];
-          modifiedD = modifiedD.filter((c: any) => c.id !== data.params.id);
-        }
-      }
-    }
+
     onChangeContacts(contacts);
     onChangeFavourite(modifiedF);
     onChangeDirectMessages(modifiedD);
@@ -859,43 +559,6 @@ const fakeBackend = () => {
     let modifiedD = [...directMessages];
     let modifiedChannels = [...userChannels];
     let modifiedChatChannels = [...channels];
-    if (data.params.id && contacts.length !== 0) {
-      const contactIdx = (modifiedC || []).findIndex(
-        (c: any) => c.id + "" === data.params.id + ""
-      );
-      const channelIdx = (modifiedChannels || []).findIndex(
-        (c: any) => c.id + "" === data.params.id + ""
-      );
-      if (contactIdx > -1) {
-        if (contacts[contactIdx].isArchived) {
-          contacts[contactIdx].isArchived = false;
-          modifiedA = modifiedA.filter((f: any) => f.id !== data.params.id);
-          message = "User has been removed to your archives";
-        } else {
-          contacts[contactIdx].isArchived = true;
-          modifiedA = [...modifiedA, contacts[contactIdx]];
-          modifiedD = modifiedD.filter((c: any) => c.id !== data.params.id);
-        }
-      } else if (channelIdx > -1) {
-        if (userChannels[channelIdx].isArchived) {
-          userChannels[channelIdx].isArchived = false;
-          modifiedA = modifiedA.filter((f: any) => f.id !== data.params.id);
-          message = "User has been removed to your archives";
-        } else {
-          userChannels[channelIdx].isArchived = true;
-          modifiedA = [
-            ...modifiedA,
-            { ...userChannels[channelIdx], isChannel: true },
-          ];
-          modifiedChannels = modifiedChannels.filter(
-            (c: any) => c.id !== data.params.id
-          );
-          modifiedChatChannels = modifiedChatChannels.filter(
-            (c: any) => c.id !== data.params.id
-          );
-        }
-      }
-    }
     onChangeContacts(contacts);
     onChangeArchives(modifiedA);
     onChangeDirectMessages(modifiedD);
@@ -909,89 +572,6 @@ const fakeBackend = () => {
         });
       } else {
         reject(["Internal Error!"]);
-      }
-    });
-  });
-
-  mock.onPut(new RegExp(`${url.READ_CONVERSATION}/*`)).reply(config => {
-    const data = JSON.parse(config["data"]);
-    let modifiedD = [...directMessages];
-    let modifiedF = [...favourites];
-    let modifiedC = [...channels];
-    if (data.params && data.params.id && conversations.length !== 0) {
-      /*
-     for chat conversations
-     */
-
-      const contactIdx = (modifiedD || []).findIndex(
-        (c: any) => c.id + "" === data.params.id + ""
-      );
-      const contactFIdx = (modifiedF || []).findIndex(
-        (c: any) => c.id + "" === data.params.id + ""
-      );
-      const contactCIdx = (modifiedC || []).findIndex(
-        (c: any) => c.id + "" === data.params.id + ""
-      );
-      if (contactIdx > -1 && modifiedD[contactIdx]["meta"]) {
-        modifiedD[contactIdx].meta!.unRead = 0;
-        onChangeDirectMessages(modifiedD);
-      }
-      if (contactFIdx > -1 && modifiedF[contactFIdx]["meta"]) {
-        modifiedF[contactFIdx].meta!.unRead = 0;
-        onChangeFavourite(modifiedF);
-      }
-      if (contactCIdx > -1 && modifiedC[contactCIdx]["meta"]) {
-        modifiedC[contactCIdx].meta!.unRead = 0;
-        onChangeChannels(modifiedC);
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      if (modifiedD) {
-        resolve([200, "true"]);
-      } else {
-        setTimeout(() => {
-          reject(["Your id is not found"]);
-        }, 500);
-      }
-    });
-  });
-
-  mock.onDelete(new RegExp(`${url.DELETE_IMAGE}/*`)).reply(config => {
-    const { params } = config;
-
-    return new Promise((resolve, reject) => {
-      if (params.userId && params.messageId && params.imageId) {
-        let modifiedC = [...conversations];
-        const conversationIdx = (modifiedC || []).findIndex(
-          (c: any) => c.userId + "" === params.userId + ""
-        );
-        if (conversationIdx > -1 && modifiedC[conversationIdx].messages) {
-          const mIdx = (modifiedC[conversationIdx].messages || []).findIndex(
-            (c: any) => c.mId + "" === params.messageId + ""
-          );
-          if (
-            mIdx > -1 &&
-            modifiedC[conversationIdx].messages[mIdx] &&
-            modifiedC[conversationIdx].messages[mIdx].image
-          ) {
-            if (modifiedC[conversationIdx].messages[mIdx].image?.length === 1) {
-              modifiedC[conversationIdx].messages = (
-                modifiedC[conversationIdx].messages || []
-              ).filter((m: any) => m.mId + "" !== params.messageId + "");
-            } else {
-              modifiedC[conversationIdx].messages[mIdx].image = modifiedC[
-                conversationIdx
-              ].messages[mIdx].image?.filter(
-                (m: any) => m.id + "" !== params.imageId + ""
-              );
-            }
-          }
-        }
-        onChangeConversations(modifiedC);
-        resolve([200, "Message is Deleted!"]);
-      } else {
-        reject(["Your id is not found"]);
       }
     });
   });

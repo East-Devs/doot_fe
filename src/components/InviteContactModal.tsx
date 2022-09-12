@@ -41,7 +41,7 @@ const InviteContactModal = ({
     });
   }, []);
 
-  const onChangeData = (field: "email" | "name" | "message", value: string) => {
+  const onChangeData = (field: "email", value: string) => {
     let modifiedData: DataTypes = { ...data };
     if (value === "") {
       modifiedData[field] = null;
@@ -56,7 +56,7 @@ const InviteContactModal = ({
   */
   const [valid, setValid] = useState<boolean>(false);
   useEffect(() => {
-    if (data.email !== null && data.message !== null && data.name !== null) {
+    if (data.email !== null) {
       setValid(true);
     } else {
       setValid(false);
@@ -84,39 +84,6 @@ const InviteContactModal = ({
               }}
             />
           </div>
-          <div className="mb-3">
-            <Label htmlFor="AddContactModalname-input" className="form-label">
-              Name
-            </Label>
-            <Input
-              type="text"
-              className="form-control"
-              id="AddContactModalname-input"
-              placeholder="Enter Name"
-              value={data["name"] || ""}
-              onChange={(e: any) => {
-                onChangeData("name", e.target.value);
-              }}
-            />
-          </div>
-          <div className="mb-3">
-            <Label
-              htmlFor="AddContactModal-invitemessage-input"
-              className="form-label"
-            >
-              Invatation Message
-            </Label>
-            <textarea
-              value={data["message"] || ""}
-              onChange={(e: any) => {
-                onChangeData("message", e.target.value);
-              }}
-              className="form-control"
-              id="AddContactModal-invitemessage-input"
-              rows={3}
-              placeholder="Enter Message"
-            ></textarea>
-          </div>
         </Form>
       </ModalBody>
       <ModalFooter>
@@ -129,7 +96,7 @@ const InviteContactModal = ({
           disabled={!valid}
           onClick={() => onInvite(data)}
         >
-          Invite
+          Add
         </Button>
       </ModalFooter>
     </Modal>

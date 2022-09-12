@@ -69,33 +69,6 @@ const ContactItem = ({ contact, onSelectChat }: ContactItemProps) => {
         <div className="flex-grow-1">
           <h5 className="font-size-14 m-0">{fullName}</h5>
         </div>
-        <div className="flex-shrink-0">
-          <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle tag="a" className="text-mute">
-              <i className="bx bx-dots-vertical-rounded align-middle"></i>
-            </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-end">
-              <DropdownItem
-                className="d-flex align-items-center justify-content-between"
-                href="#"
-              >
-                Edit <i className="bx bx-pencil ms-2 text-muted"></i>
-              </DropdownItem>
-              <DropdownItem
-                className="d-flex align-items-center justify-content-between"
-                href="#"
-              >
-                Block <i className="bx bx-block ms-2 text-muted"></i>
-              </DropdownItem>
-              <DropdownItem
-                className="d-flex align-items-center justify-content-between"
-                href="#"
-              >
-                Remove <i className="bx bx-trash ms-2 text-muted"></i>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
       </div>
     </li>
   );

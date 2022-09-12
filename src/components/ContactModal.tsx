@@ -121,8 +121,9 @@ const ContactModal = ({ isOpen, onClose, onAddContact }: ContactModalProps) => {
     let filteredContacts = (modifiedContacts || []).filter((c: any) =>
       c["firstName"].toLowerCase().includes(value.toLowerCase())
     );
-    const formattedContacts = divideByKey("firstName", filteredContacts);
-    setContacts(formattedContacts);
+    if(filteredContacts.length > 0)
+    {const formattedContacts = divideByKey("firstName", filteredContacts);
+    setContacts(formattedContacts);}
   };
 
   const totalC = (contacts || []).length;
