@@ -5,19 +5,20 @@ import { Button, Modal, ModalBody } from "reactstrap";
 import { getProfileImage } from "../constants";
 import { SocketContext } from "../context";
 import { useRedux } from "../hooks";
-interface AudioCallModalProps {
+interface AudioCallAlertProps {
   isOpen: boolean;
   onClose: () => void;
   user: any | null;
 }
 
-const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
-  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, callUser, updateAudioStatus } = useContext(SocketContext);
+const AudioCallAlert = ({ isOpen, onClose, user }: AudioCallAlertProps) => {
+  const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, callUser, updateAudioStatus, call, answerCall} = useContext(SocketContext);
 
   const { useAppSelector,dispatch } = useRedux();
   const { selectedChat } = useAppSelector(state => ({
     selectedChat: state.Chats.selectedChat,
   }));
+
   const [audioOff, setAudioOff] = useState(false);
 
   const handleAudioOff = () => {
@@ -41,24 +42,15 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
         setStream(currentStream);
         myVideo.current.srcObject = currentStream;
       })
-      .catch(() => {
-        navigator.mediaDevices
-        .getUserMedia({ video: {
-          deviceId: "XeU8qZBqaTclK8IxIlvGM5xaAgq4nszjOdwQOqE8Svs="
-        }})
-        .then(currentStream => {
-          console.log('Caller Stream', myVideo, currentStream);
-          setStream(currentStream);
-          myVideo.current.srcObject = currentStream;
-        })
-        .catch((err) => {
+      .catch((err) => {
           alert(`Failed to get any stmrea ${err}`);
-        })
-      }).finally(()=>{
-        callUser(selectedChat, true);
       })
 
   }, [isOpen])
+
+  const onAccept = () => {
+    answerCall();
+  }
 
 
 
@@ -75,7 +67,7 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
         <div className="text-center p-4 pb-0">
           <div className="avatar-xl mx-auto mb-4">
             <img
-              src={getProfileImage(user?.profileImage)}
+              src={getProfileImage(call?.profileImage)}
               alt=""
               className="img-thumbnail rounded-circle"
               crossOrigin="anonymous"
@@ -117,24 +109,39 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
             </div>
           </div>
 
-          <div className="mt-4">
-            <Button
-              type="button"
-              className="btn btn-danger avatar-md call-close-btn rounded-circle"
-              color="danger"
-              onClick={onClose}
-            >
-              <span className="avatar-title bg-transparent font-size-24">
-                <i className="mdi mdi-phone-hangup"></i>
-              </span>
-            </Button>
-          </div>
+          {call.isReceivingCall && callAccepted ? <div className="mt-4">
+              <Button
+                color="danger"
+                type="button"
+                className="avatar-md call-close-btn rounded-circle"
+                onClick={onClose}
+              >
+                <span className="avatar-title bg-transparent font-size-24">
+                  <i className="mdi mdi-phone-hangup"></i>
+                </span>
+              </Button>
+            </div>
+            :
+            <div className="mt-4">
+              <Button
+                color="success"
+                type="button"
+                className="avatar-md call-close-btn rounded-circle"
+                onClick={onAccept}
+              >
+                <span className="avatar-title bg-transparent font-size-24">
+                  <i className="mdi mdi-phone-hangup"></i>
+                </span>
+              </Button>
+            </div>
+
+            }
         </div>
 
         <div className="p-4 bg-soft-primary mt-n4">
           <div className="mt-4 text-center">
             <h5 className="font-size-18 mb-0 text-truncate">
-            {`Calling ${user?.fullname}`}
+             {callAccepted? call.name : `${call.name} is calling`}
             </h5>
           </div>
         </div>
@@ -143,4 +150,4 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
   );
 };
 
-export default AudioCallModal;
+export default AudioCallAlert;

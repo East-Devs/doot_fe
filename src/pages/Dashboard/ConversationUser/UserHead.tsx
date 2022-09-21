@@ -43,11 +43,14 @@ const ProfileImage = ({
   onOpenUserDetails,
   isChannel,
 }: ProfileImageProps) => {
+
+  console.log('Is Channel Head', isChannel);
+
   const fullName = !isChannel?
-    chatUserDetails.fullname
+    chatUserDetails?.fullname
     : chatUserDetails.name;
   const shortName = !isChannel
-    ? chatUserDetails.fullname
+    ? chatUserDetails?.fullname
       ? `${chatUserDetails.fullname.charAt(
           0
         )}${chatUserDetails.fullname.charAt(0)}`
@@ -64,9 +67,6 @@ const ProfileImage = ({
     "bg-purple",
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
-
-  const isOnline =
-    !!chatUserDetails.socketId ? STATUS_TYPES.ACTIVE : STATUS_TYPES.AWAY;
 
   const members = (chatUserDetails.members || []).length;
   return (
@@ -88,8 +88,7 @@ const ProfileImage = ({
               "chat-user-img",
               "align-self-center",
               "me-3",
-              "ms-0",
-              { online: isOnline }
+              "ms-0"
             )}
           >
             {chatUserDetails.profileImage ? (
@@ -100,7 +99,7 @@ const ProfileImage = ({
                   alt=""
                   crossOrigin="anonymous"
                 />
-                <span
+                {/* <span
                   className={classnames(
                     "user-status",
                     {
@@ -116,7 +115,7 @@ const ProfileImage = ({
                         chatUserDetails.status === STATUS_TYPES.DO_NOT_DISTURB,
                     }
                   )}
-                ></span>
+                ></span> */}
               </>
             ) : (
               <div className="avatar-sm align-self-center">
@@ -130,7 +129,6 @@ const ProfileImage = ({
                   )}
                 >
                   <span className="username"> {shortName}</span>
-                  <span className="user-status"></span>
                 </span>
               </div>
             )}

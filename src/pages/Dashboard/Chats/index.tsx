@@ -20,6 +20,7 @@ import {
   getChannelDetails,
   getArchiveContact,
   readConversation,
+  getContacts,
 } from "../../../redux/actions";
 
 // interfaces
@@ -109,7 +110,7 @@ const {userProfile} = useProfile()
     if (isContactInvited) {
       setIsOpen(false);
       setTimeout(() => {
-        dispatch(resetContacts("isContactInvited", false));
+        dispatch(getContacts());
       }, 1000);
     }
   }, [dispatch, isContactInvited]);
@@ -165,12 +166,13 @@ const {userProfile} = useProfile()
     // debugger;
     if (isChannel) {
       dispatch(getChannelDetails(id));
+      dispatch(getChatUserConversations(id, null));
+      // dispatch(changeSelectedChat(id));
     } else {
       dispatch(getChatUserDetails(id));
+      dispatch(getChatUserConversations(userProfile._id,id));
+      dispatch(changeSelectedChat(id));
     }
-    dispatch(readConversation(id));
-    dispatch(getChatUserConversations(userProfile._id,id));
-    dispatch(changeSelectedChat(id));
   };
 
   /*

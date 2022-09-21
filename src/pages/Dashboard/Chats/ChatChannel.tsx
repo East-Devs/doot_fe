@@ -2,19 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
-// interface
-import { ChannelTypes } from "../../../data/chat";
 
 interface ChannelProps {
-  channel: ChannelTypes;
+  channel: any;
   selectedChat: string | number;
   onSelectChat: (id: number | string, isChannel?: boolean) => void;
 }
 const ChatChannel = ({ channel, selectedChat, onSelectChat }: ChannelProps) => {
-  const unRead = channel.meta && channel.meta.unRead;
+  const unRead = channel?.meta && channel?.meta.unRead;
   const isSelectedChat: boolean =
     selectedChat && selectedChat === channel.id ? true : false;
   const onClick = () => {
+    console.log('Selecting channel', channel);
     onSelectChat(channel.id, true);
   };
 

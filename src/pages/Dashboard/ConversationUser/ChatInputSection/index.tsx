@@ -55,8 +55,8 @@ const Index = ({
   /*
   files
   */
-  const [files, setFiles] = useState<Array<any> | null | undefined>();
-  const onSelectFiles = (files: Array<any>) => {
+  const [files, setFiles] = useState<any | null | undefined>();
+  const onSelectFiles = (files: any) => {
     setFiles(files);
   };
   useEffect(() => {
@@ -83,17 +83,8 @@ const Index = ({
       data["image"] = imgs;
     }
 
-    if (files && files.length) {
-      const fs = (files || []).map((f: any, key: number) => {
-        const src = URL.createObjectURL(f);
-        return {
-          id: key + 1,
-          name: f.name,
-          downloadLink: src,
-          desc: f.size,
-        };
-      });
-      data["attachments"] = fs;
+    if (files) {
+      data["attachments"] = files;
     }
 
     setText("");
@@ -154,11 +145,11 @@ const Index = ({
         </Alert>
       ) : null}
 
-      <Reply
+      {/* <Reply
         reply={replyData}
         onSetReplyData={onSetReplyData}
         chatUserDetails={chatUserDetails}
-      />
+      /> */}
     </div>
   );
 };

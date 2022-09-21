@@ -13,7 +13,7 @@ export const INIT_STATE: ChatsState = {
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
-  socket:null
+  socket: null,
 };
 
 const Chats = (state = INIT_STATE, action: any) => {
@@ -30,10 +30,10 @@ const Chats = (state = INIT_STATE, action: any) => {
         case ChatsActionTypes.GET_DIRECT_MESSAGES:
           return {
             ...state,
-            directMessages: action.payload.data.map((item: any) =>  ({
+            directMessages: action.payload.data.map((item: any) => ({
               ...item,
               firstName: item.firstName ?? item.email,
-              lastName: item.lastName ?? item.email
+              lastName: item.lastName ?? item.email,
             })),
             isDirectMessagesFetched: true,
             getDirectMessagesLoading: false,
@@ -77,6 +77,7 @@ const Chats = (state = INIT_STATE, action: any) => {
             isMessageForwarded: false,
           };
         case ChatsActionTypes.ON_SEND_MESSAGE:
+          console.log("Message send");
           return {
             ...state,
             isUserMessageSent: true,
@@ -112,6 +113,7 @@ const Chats = (state = INIT_STATE, action: any) => {
           return {
             ...state,
             chatUserDetails: { ...action.payload.data, isChannel: true },
+            selectedChat: action.payload.data.id,
             isChannelDetailsFetched: true,
             getUserDetailsLoading: false,
           };
@@ -296,13 +298,17 @@ const Chats = (state = INIT_STATE, action: any) => {
         ...state,
         chatUserConversations: {
           ...state.chatUserConversations,
-          messages:[...(state.chatUserConversations as any).messages,action.payload]},
+          messages: [
+            ...(state.chatUserConversations as any).messages,
+            action.payload,
+          ],
+        },
       };
     case ChatsActionTypes.SET_SOCKET:
       // debugger;
       return {
         ...state,
-        socket:action.payload,
+        socket: action.payload,
       };
     case ChatsActionTypes.TOGGLE_USER_DETAILS_TAB:
       return {

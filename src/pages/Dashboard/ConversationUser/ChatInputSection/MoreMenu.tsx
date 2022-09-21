@@ -50,7 +50,6 @@ const MoreMenu = ({
                     type="file"
                     className="d-none"
                     onChange={(e: any) => onSelectF(e)}
-                    multiple
                   />
                   <Label
                     htmlFor="attachedfile-input"

@@ -247,7 +247,7 @@ const AddGroupModal = ({
               </div>
             </Collapse>
           </div>
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <Label htmlFor="addgroupdescription-input" className="form-label">
               Description
             </Label>
@@ -261,7 +261,7 @@ const AddGroupModal = ({
                 onDataChange("description", e.target.value);
               }}
             />
-          </div>
+          </div> */}
         </Form>
       </ModalBody>
       <ModalFooter>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BACKEND_URL } from "../constants";
-import { APIClient } from "./apiCore";
+import { APIClient, getLoggedinUser } from "./apiCore";
 import * as url from "./urls";
 
 const api = new APIClient();
@@ -16,26 +16,41 @@ const getDirectMessages = (id: string | number) => {
   // return api.get(url.GET_DIRECT_MESSAGES);
 };
 const getChannels = () => {
-  return api.get(url.GET_CHANNELS);
+  const userProfileSession = getLoggedinUser();
+  return axios.get(`${BACKEND_URL}/api/channels/${userProfileSession._id}`);
 };
 
 const addContacts = (contacts: Array<string | number>) => {
   return api.create(url.ADD_CONTACTS, contacts);
 };
 
-const createChannel = (data: object) => {
-  return api.create(url.CREATE_CHANNEL, data);
+const createChannel = async (data: any) => {
+  console.log("Create Channel", data);
+  const userProfileSession = getLoggedinUser();
+  data.members.push(userProfileSession._id);
+  try {
+    const reply = await axios.post(`${BACKEND_URL}/api/channels`, data);
+
+    return "Group Created";
+  } catch (error) {
+    return "Failed to create";
+  }
 };
 
 const getChatUserDetails = (id: string | number) => {
-  console.log('Hmm getting this user', id,`${BACKEND_URL}/api/users?userId=${id}`);
+  console.log(
+    "Hmm getting this user",
+    id,
+    `${BACKEND_URL}/api/users?userId=${id}`
+  );
   return axios.get(`${BACKEND_URL}/api/users?userId=${id}`);
 };
 
-const getChatUserConversations = (ids : any) => {
-  // debugger;
-  //safyan
-  return axios.get(`${BACKEND_URL}/api/conversations/find/${ids.user1Id}/${ids.user2Id}`);
+const getChatUserConversations = (ids: any) => {
+  let url = `${BACKEND_URL}/api/conversations/find/${ids.user1Id}/${ids.user2Id}`;
+  console.log("User id,s ", ids);
+  if (!ids.user2Id) url = `${BACKEND_URL}/api/channels/messages/${ids.user1Id}`;
+  return axios.get(url);
   // return api.get(url.GET_CHAT_USER_CONVERSATIONS + "/" + id, {
   //   params: { id },
   // });
@@ -44,7 +59,11 @@ const getChatUserConversations = (ids : any) => {
 const sendMessage = (data: object) => {
   // debugger
   //safyan
-  return axios.post(`${BACKEND_URL}/api/messages`,data);
+  return axios.post(`${BACKEND_URL}/api/messages`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data;",
+    },
+  });
   // return api.create(url.SEND_MESSAGE, data);
 };
 
@@ -79,7 +98,7 @@ const deleteUserMessages = (userId: number | string) => {
 };
 
 const getChannelDetails = (id: string | number) => {
-  return api.get(url.GET_CHANNEL_DETAILS + "/" + id, { params: { id } });
+  return axios.get(`${BACKEND_URL}/api/channels/find/${id}`);
 };
 
 const toggleFavouriteContact = (id: string | number) => {

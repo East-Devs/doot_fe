@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
+  Button,
 } from "reactstrap";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
@@ -27,7 +28,8 @@ import { useProfile } from "../../../hooks";
 // utils
 import { formateDate } from "../../../utils";
 import RepliedMessage from "./RepliedMessage";
-import { getProfileImage } from "../../../constants";
+import { BACKEND_URL, getProfileImage } from "../../../constants";
+import { download } from "../../../utils/datautils";
 
 interface MenuProps {
   onDelete: () => any;
@@ -208,12 +210,12 @@ const Images = ({ images, onDeleteImg }: ImagesProps) => {
 };
 
 interface AttachmentsProps {
-  attachments: AttachmentTypes[] | undefined;
+  attachments: any[] | undefined;
 }
 const Attachments = ({ attachments }: AttachmentsProps) => {
   return (
     <>
-      {(attachments || []).map((attachment: AttachmentTypes, key: number) => (
+      {(attachments || []).map((attachment: any, key: number) => (
         <div
           key={key}
           className={classnames("p-3", "border-primary", "border rounded-3", {
@@ -226,23 +228,15 @@ const Attachments = ({ attachments }: AttachmentsProps) => {
                 <i className="ri-attachment-2"></i>
               </div>
             </div>
-            <div className="flex-grow-1 overflow-hidden">
-              <div className="text-start">
-                <h5 className="font-size-14 mb-1">{attachment.name}</h5>
-                <p className="text-muted text-truncate font-size-13 mb-0">
-                  {attachment.desc}
-                </p>
-              </div>
-            </div>
             <div className="flex-shrink-0 ms-4">
               <div className="d-flex gap-2 font-size-20 d-flex align-items-start">
                 <div>
-                  <Link
-                    to={attachment.downloadLink ? attachment.downloadLink : "#"}
+                  <Button
+                     onClick={() => download(`${BACKEND_URL}/files/${attachment}`, attachment)}
                     className="text-muted"
                   >
                     <i className="bx bxs-download"></i>
-                  </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -287,7 +281,7 @@ const Message = ({
 }: MessageProps) => {
   const { userProfile } = useProfile();
   const hasImages = message.image && message.image.length;
-  const hasAttachments = message.attachments && message.attachments.length;
+  const hasAttachments = !!message.file && message.file;
   const hasText = message.text;
   const isTyping = false;
 
@@ -296,7 +290,13 @@ const Message = ({
     : "-";
 
   const myProfile = getProfileImage(userProfile.profileImage);
-  const channeluserProfile = getProfileImage(message?.meta?.userData?.profileImage);
+  let channelUser;
+  
+  if(isChannel && chatUserDetails && chatUserDetails.members)
+  {
+    channelUser= chatUserDetails.members.find((user: any) => user._id == message.sender);
+  }
+  const channeluserProfile = getProfileImage(channelUser?.profileImage);
   const chatUserprofile = getProfileImage(chatUserDetails.profileImage);
   const profile = isChannel ? channeluserProfile : chatUserprofile;
   // const date = formateDate(message.time, "hh:mmaaa");
@@ -306,8 +306,8 @@ const Message = ({
   const isReceived = message?.meta?.received || true;
   const isRead = message?.meta?.read || true;
   const isForwarded = message?.meta?.isForwarded || false;
-  const channdelSenderFullname = message?.meta?.userData
-    ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
+  const channdelSenderFullname = channelUser
+    ? `${channelUser.firstName} ${channelUser.lastName}`
     : "-";
   const fullName = isChannel ? channdelSenderFullname : chatUserFullName;
   const onDeleteMessage = () => {
@@ -326,6 +326,8 @@ const Message = ({
   const onDeleteImg = (imageId: number | string) => {
     onDeleteImage(message.mId, imageId);
   };
+
+  console.log('Chat Message', message, hasAttachments);
   return (
     <li
       className={classnames(
@@ -398,7 +400,7 @@ const Message = ({
                   {/* typing end */}
                   {/* files message start */}
                   {hasAttachments && (
-                    <Attachments attachments={message.attachments} />
+                    <Attachments attachments={[message.file]} />
                   )}
                   {/* files message end */}
                 </div>

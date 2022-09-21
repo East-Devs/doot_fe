@@ -25,15 +25,20 @@ const SocketProvider = ({ children }) => {
       setMe(id);
     });
 
-    socket.on("callUser", ({ from, name: callerName, signal }) => {
-      console.log(`Rec call from ${callerName}`, from);
-      setCall({
-        isReceivingCall: true,
-        from,
-        name: callerName,
-        signal: signal,
-      });
-    });
+    socket.on(
+      "callUser",
+      ({ from, name: callerName, signal, isAudio, profileImage }) => {
+        console.log(`Rec call from ${callerName} - ${isAudio}`, from, profileImage);
+        setCall({
+          isReceivingCall: true,
+          from,
+          name: callerName,
+          signal: signal,
+          isAudio,
+          profileImage,
+        });
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -58,6 +63,8 @@ const SocketProvider = ({ children }) => {
     console.log("Before accept stream", myVideo.current.srcObject);
     setCallAccepted(true);
 
+    // updateVideoStatus(!call.isAudio);
+
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -66,7 +73,11 @@ const SocketProvider = ({ children }) => {
 
     peer.on("signal", data => {
       console.log("Call Rec Signal", data, call.from);
-      socket.emit("answerCall", { signal: data, to: call.from });
+      socket.emit("answerCall", {
+        signal: data,
+        to: call.from,
+        isAudio: call.isAudio,
+      });
     });
 
     peer.on("stream", currentStream => {
@@ -96,8 +107,11 @@ const SocketProvider = ({ children }) => {
     });
   };
 
-  const callUser = id => {
-    console.log("Before call stream", myVideo.current.srcObject);
+  const callUser = (id, isAudio) => {
+    console.log("Before call stream", myVideo.current.srcObject, isAudio);
+
+    // updateVideoStatus(!isAudio);
+
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -105,11 +119,12 @@ const SocketProvider = ({ children }) => {
     });
 
     peer.on("signal", data => {
-      console.log("Calling User Signal: ", id, call.from);
+      console.log("Calling User Signal: ", id, call.from, isAudio);
       socket.emit("callUser", {
         userToCall: id,
         signalData: data,
         from: me,
+        isAudio,
       });
     });
 

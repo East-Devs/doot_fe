@@ -13,10 +13,11 @@ import Leftbar from "./Leftbar";
 import ConversationUser from "./ConversationUser/index";
 import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
-import { setChatUserConversation, setSocket, setStreamInfo } from "../../redux/actions";
+import { getChannels, getDirectMessages, setChatUserConversation, setSocket, setStreamInfo } from "../../redux/actions";
 import { SocketContext } from "../../context";
 import VideoCallModal from "../../components/VideoCallModal";
 import VideoCallAlert from "../../components/VideoCallAlert";
+import AudioCallAlert from "../../components/AudioCallAlert";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
@@ -29,36 +30,49 @@ const Index = (props: IndexProps) => {
 
   const {  callAccepted, myVideo, userVideo, callEnded, stream, setStream, call, leaveCall,socket } = useContext(SocketContext);
 
-  React.useEffect(() => {
-    //socket.io
-    if(socket){
-      dispatch(setSocket(socket));
-      // debugger;
-      socket.emit("addUser", userProfile._id)
-      socket.on("getMessage", (data:{sender: string,text: string}) => {
-        // debugger;
-        dispatch(setChatUserConversation(data))
-      });
-    }
-
-    // //simple-peer
-    // navigator.mediaDevices
-    //   .getUserMedia({ video: true, audio: true })
-    //   .then((currentStream) => {
-    //     console.log(currentStream);
-    //     // myVideo.current = currentStream;
-    //     // dispatch(setStreamInfo(myVideo.current))
-    //   });
-    //   socketClient.current.on("callUser", ({ from, name: callerName, signal }:any) => {
-    //     dispatch(setStreamInfo({isReceivingCall: true, from, name: callerName, signal}))
-		// });
-  }, []);
-
   const { selectedChat } = useAppSelector(state => ({
     selectedChat: state.Chats.selectedChat,
   }));
 
+  React.useEffect(() => {
+    //socket.io
+    if(socket){
+      dispatch(setSocket(socket));
+      socket.emit("addUser", userProfile._id)
+
+      socket.on("newGroup", () => {
+        dispatch(getChannels());
+      });
+    }
+
+    return () => {
+      socket.removeAllListeners('newGroup');
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if(socket){
+     socket.on("getMessage", (data: {sender: string,text: string}) => {
+        
+        if(data.sender == selectedChat)
+          dispatch(setChatUserConversation(data))
+        else
+        {
+          dispatch(getDirectMessages(userProfile._id));
+        }
+      });
+    }
+
+    return () => {
+      socket.removeAllListeners('getMessage');
+    }
+
+  }, [selectedChat]);
+
+ 
+
   const { isChannel } = useConversationUserType();
+  console.log('Is Channel', isChannel);
 
   const onClose = ()=> {
     leaveCall();
@@ -86,7 +100,9 @@ const Index = (props: IndexProps) => {
           <Welcome />
         )}
 
-        <VideoCallAlert user={userProfile} isOpen={call.isReceivingCall } onClose={onClose}/>
+        <VideoCallAlert user={userProfile} isOpen={call.isReceivingCall  && !call.isAudio } onClose={onClose}/>
+
+        <AudioCallAlert user={userProfile} isOpen={call.isReceivingCall && call.isAudio } onClose={onClose}/>
       </div>
     </>
   );

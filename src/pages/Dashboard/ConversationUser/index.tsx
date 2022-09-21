@@ -29,6 +29,7 @@ import { MessagesTypes } from "../../../data/messages";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
+import { prepareForm } from "../../../utils/datautils";
 
 interface IndexProps {
   isChannel: boolean;
@@ -88,29 +89,48 @@ const Index = ({ isChannel }: IndexProps) => {
   const onSend = (data: any) => {
     // debugger;
     //safyan
+
+    var file = null;
+    var fName = null;
+    if(data.attachments && data.attachments.length > 0)
+    {
+      file = data.attachments[0];
+
+      let extension = file.name.split(".");
+      extension = extension[extension.length - 1];
+      fName = Date.now() + Math.floor(Math.random() * 1000) + "." + extension;
+    }
+      
+
+
     let params: any = {
       text: data.text && data.text,
       time: new Date().toISOString(),
       image: data.image && data.image,
-      attachments: data.attachments && data.attachments,
       meta: {
         receiver: selectedChat,
         sender: userProfile._id,
       },
+      isChannel: chatUserDetails.isChannel,
+      isFile: !!file,
+      fName
     };
-    if (replyData && replyData !== null) {
-      params["replyOf"] = replyData;
-    }
-    // debugger;
-    socket.emit("sendMessage", params);
-    dispatch(onSendMessage(params));
-    if (!isChannel) {
+
+    const form = prepareForm(params, file);
+
+    params.file = fName;
+
+    //  debugger;
+    // socket.emit("sendMessage", params);
+    dispatch(onSendMessage(form));
+   
       setTimeout(() => {
         dispatch(receiveMessage(chatUserDetails.id));
       }, 1000);
-      setTimeout(() => {
-        dispatch(readMessage(chatUserDetails.id));
-      }, 1500);
+      // setTimeout(() => {
+      //   dispatch(readMessage(chatUserDetails.id));
+      // }, 1500);
+    if (!isChannel) {
       setTimeout(() => {
         dispatch(receiveMessageFromUser(chatUserDetails.id));
       }, 2000);
@@ -127,7 +147,10 @@ const Index = ({ isChannel }: IndexProps) => {
       isImageDeleted
     ) {
       // debugger;
-      dispatch(getChatUserConversations(userProfile._id, selectedChat));
+      if(chatUserDetails.isChannel)
+        dispatch(getChatUserConversations(selectedChat, null));
+      else
+        dispatch(getChatUserConversations(userProfile._id, selectedChat));
     }
   }, [
     dispatch,
@@ -154,7 +177,7 @@ const Index = ({ isChannel }: IndexProps) => {
   return (
     <>
       <UserHead
-        chatUserDetails={currentChatUser}
+        chatUserDetails={currentChatUser || chatUserDetails}
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}
@@ -163,7 +186,7 @@ const Index = ({ isChannel }: IndexProps) => {
       />
       <Conversation
         chatUserConversations={chatUserConversations}
-        chatUserDetails={currentChatUser}
+        chatUserDetails={currentChatUser || chatUserDetails}
         onDelete={onDeleteMessage}
         onSetReplyData={onSetReplyData}
         isChannel={isChannel}
@@ -172,7 +195,7 @@ const Index = ({ isChannel }: IndexProps) => {
         onSend={onSend}
         replyData={replyData}
         onSetReplyData={onSetReplyData}
-        chatUserDetails={currentChatUser}
+        chatUserDetails={currentChatUser || chatUserDetails}
       />
     </>
   );

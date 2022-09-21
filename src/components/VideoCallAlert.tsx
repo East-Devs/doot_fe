@@ -38,7 +38,7 @@ const VideoCallAlert = ({ isOpen, onClose, user }: VideoCallModalProps) => {
   const [soundOff, setSoundOff] = useState(false);
 
   const handleSoundOff = () => {
-    setSoundOff(!audioOff);
+    setSoundOff(!soundOff);
   }
 
 
@@ -138,17 +138,6 @@ const VideoCallAlert = ({ isOpen, onClose, user }: VideoCallModalProps) => {
                   </span>
                 </Button>
               </div>
-              {/* <div className="avatar-md h-auto">
-                <Button
-                  color="light"
-                  type="button"
-                  className="avatar-sm rounded-circle"
-                >
-                  <span className="avatar-title bg-transparent text-muted font-size-20">
-                    <i className="bx bx-refresh"></i>
-                  </span>
-                </Button>
-              </div> */}
             </div>
 
             {call.isReceivingCall && callAccepted ? <div className="mt-4">

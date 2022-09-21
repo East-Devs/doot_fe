@@ -38,22 +38,18 @@ const Index = ({ isChannel }: IndexProps) => {
     getUserDetailsLoading,
     isOpenUserDetails,
     isFavouriteContactToggled,
-    selectedChat
+    selectedChat,
+    chatUserDetails
   } = useAppSelector(state => ({
     directMessages: state.Chats.directMessages,
     getUserDetailsLoading: state.Chats.getUserDetailsLoading,
     isOpenUserDetails: state.Chats.isOpenUserDetails,
     isFavouriteContactToggled: state.Chats.isFavouriteContactToggled,
     selectedChat: state.Chats.selectedChat,
+    chatUserDetails: state.Chats.chatUserDetails
   }));
 
-  const chatUserDetails = directMessages.find((u: any) => u._id == selectedChat);
-
-  useEffect(() => {
-    if (isFavouriteContactToggled) {
-      dispatch(getChatUserDetails(chatUserDetails.id));
-    }
-  }, [dispatch, isFavouriteContactToggled, chatUserDetails.id]);
+  const chatUserDetails2 = directMessages.find((u: any) => u._id == selectedChat);
 
   /*
   close tab
@@ -110,7 +106,7 @@ const Index = ({ isChannel }: IndexProps) => {
 
           <ProfileUser
             onCloseUserDetails={onCloseUserDetails}
-            chatUserDetails={chatUserDetails}
+            chatUserDetails={chatUserDetails || chatUserDetails2}
             onOpenVideo={onOpenVideo}
             onOpenAudio={onOpenAudio}
           />
@@ -130,14 +126,14 @@ const Index = ({ isChannel }: IndexProps) => {
             {/* <Status about={chatUserDetails.about} /> */}
             {!isChannel ? (
               <>
-                <BasicDetails chatUserDetails={chatUserDetails} />
+                <BasicDetails chatUserDetails={chatUserDetails || chatUserDetails2} />
                 <hr className="my-4" />
                 {/* <Groups chatUserDetails={chatUserDetails} />
                 <hr className="my-4" /> */}
               </>
             ) : (
               <>
-                <Members chatUserDetails={chatUserDetails} />
+                <Members chatUserDetails={chatUserDetails || chatUserDetails2} />
                 <hr className="my-4" />
               </>
             )}
@@ -146,14 +142,14 @@ const Index = ({ isChannel }: IndexProps) => {
             <AttachedFiles attachedFiles={chatUserDetails.attachedFiles} /> */}
           </AppSimpleBar>
           {/* <!-- end user-profile-desc --> */}
-          {isOpenAudioModal && (
+          {(!chatUserDetails.isChannel && isOpenAudioModal) && (
             <AudioCallModal
               isOpen={isOpenAudioModal}
               onClose={onCloseAudio}
               user={chatUserDetails}
             />
           )}
-          {isOpenVideoModal && (
+          {(!chatUserDetails.isChannel && isOpenVideoModal) && (
             <VideoCallModal
               isOpen={isOpenVideoModal}
               onClose={onCloseVideo}
