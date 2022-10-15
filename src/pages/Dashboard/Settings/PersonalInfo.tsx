@@ -5,12 +5,10 @@ import { Button } from "reactstrap";
 import { BasicDetailsTypes } from "../../../data/settings";
 
 interface PersonalInfoProps {
-  basicDetails: BasicDetailsTypes;
+  basicDetails: any;
 }
 const PersonalInfo = ({ basicDetails }: PersonalInfoProps) => {
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
+  const fullName = basicDetails ? `${basicDetails.fullname}` : "-";
   return (
     <div className="accordion-body">
       <div className="float-end">

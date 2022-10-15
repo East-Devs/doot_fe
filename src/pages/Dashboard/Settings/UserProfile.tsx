@@ -17,9 +17,7 @@ interface UserProfileProps {
   status: STATUS_TYPES;
 }
 const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
+  const fullName = basicDetails ? `${basicDetails.fullname}` : "-";
 
   /*
     profile image
@@ -29,7 +27,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
   );
   useEffect(() => {
     if (basicDetails && basicDetails.profileImage) {
-      setImage( getProfileImage(basicDetails.profileImage));
+      setImage(getProfileImage(basicDetails.profileImage));
     }
   }, [basicDetails]);
   const onChangeProfile = (e: any) => {

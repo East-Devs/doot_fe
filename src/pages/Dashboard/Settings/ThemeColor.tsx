@@ -70,6 +70,10 @@ interface ThemeColorProps {
 const ThemeColor = ({ theme, onChangeData }: ThemeColorProps) => {
   const [themeColors] = useState<ThemeColorTypes[]>([
     {
+      id: "bgcolor-radio3",
+      color: "bg-purple",
+    },
+    {
       id: "bgcolor-radio1",
       color: "bg-blue",
     },
@@ -77,10 +81,7 @@ const ThemeColor = ({ theme, onChangeData }: ThemeColorProps) => {
       id: "bgcolor-radio2",
       color: "bg-info",
     },
-    {
-      id: "bgcolor-radio3",
-      color: "bg-purple",
-    },
+
     {
       id: "bgcolor-radio4",
       color: "bg-pink",
@@ -96,9 +97,12 @@ const ThemeColor = ({ theme, onChangeData }: ThemeColorProps) => {
   ]);
   const [selected, setSelected] = useState<ThemeColorTypes | null>(null);
   const onChangeThemeColor = (color: ThemeColorTypes) => {
+    debugger;
     setSelected(color);
     onChangeData("theme", { ...theme, color: color.id });
   };
+
+  useEffect(() => {}, []);
   useEffect(() => {
     if (theme && theme.color) {
       const userTheme = themeColors.find(

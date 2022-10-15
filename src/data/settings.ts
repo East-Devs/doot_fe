@@ -51,7 +51,7 @@ let settings: SettingsTypes = {
     location: "California, USA",
   },
   theme: {
-    // color: "bgcolor-radio1",
+    color: "bgcolor-radio3",
     image: "bgimg-radio5",
   },
   privacy: {
