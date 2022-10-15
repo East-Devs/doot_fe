@@ -49,7 +49,7 @@ const Index = (props: IndexProps) => {
 
   const [contacts, setContacts] = useState<Array<any>>([]);
   const [contactsData, setContactsData] = useState<Array<any>>([]);
-  const {userProfile} = useProfile()
+  const { userProfile } = useProfile();
 
   useEffect(() => {
     if (contactsList.length > 0) {
@@ -59,7 +59,8 @@ const Index = (props: IndexProps) => {
 
   useEffect(() => {
     if (contacts.length > 0) {
-      const formattedContacts = divideByKey("firstName", contacts);
+      debugger;
+      const formattedContacts = divideByKey("fullname", contacts);
       setContactsData(formattedContacts);
     }
   }, [contacts]);
@@ -110,7 +111,7 @@ const Index = (props: IndexProps) => {
     } else {
       dispatch(getChatUserDetails(id));
     }
-    dispatch(getChatUserConversations(userProfile._id,id));
+    dispatch(getChatUserConversations(userProfile._id, id));
     dispatch(changeSelectedChat(id));
   };
 

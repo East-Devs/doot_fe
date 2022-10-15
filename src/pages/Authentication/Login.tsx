@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Row,
@@ -14,7 +14,13 @@ import { GoogleLogin } from "react-google-login";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 // router
-import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
+import {
+  Link,
+  Redirect,
+  useHistory,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
 // validations
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,7 +34,7 @@ import config from "../../config";
 import { useProfile, useRedux } from "../../hooks/index";
 
 //actions
-import { loginUser, socialLogin } from "../../redux/actions";
+import { loginUser, socialLogin, loginRedirect } from "../../redux/actions";
 
 // components
 import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
@@ -38,6 +44,9 @@ import Loader from "../../components/Loader";
 
 interface LocationTypes {
   from?: Location;
+}
+interface ParamsTypes {
+  token?: string;
 }
 interface LoginProps {}
 const Login = (props: LoginProps) => {
@@ -55,17 +64,27 @@ const Login = (props: LoginProps) => {
 
   const history: any = useHistory();
   const location = useLocation<LocationTypes>();
+  let params = useParams<ParamsTypes>();
   const [redirectUrl, setRedirectUrl] = useState("/");
   useEffect(() => {
+    const callApi = async (token: string) => {
+      dispatch(await loginRedirect(token));
+    };
+    if (location?.pathname.startsWith("/auth-login/ey")) {
+      console.log("hello token", params?.token);
+      if (params.token) callApi(params.token);
+    }
     const url =
       location.state && location.state.from
         ? location.state.from.pathname
         : "/";
     setRedirectUrl(url);
+    console.log(location);
   }, [location]);
   useEffect(() => {
     if (isUserLogin && !loginLoading && !isUserLogout) {
       history.push(redirectUrl);
+      debugger;
     }
   }, [isUserLogin, history, loginLoading, isUserLogout, redirectUrl]);
 
@@ -91,7 +110,7 @@ const Login = (props: LoginProps) => {
 
   const onSubmitForm = (values: object) => {
     //safyan
-    dispatch(loginUser({user:values}));
+    dispatch(loginUser({ user: values }));
     // dispatch(loginUser(values));
   };
 

@@ -16,6 +16,7 @@ import {
   postFakeLogin,
   postJwtLogin,
   postSocialLogin,
+  postloginRedirect,
 } from "../../../api/index";
 
 const fireBaseBackend = getFirebaseBackend();
@@ -46,7 +47,7 @@ function* loginUser({ payload: { user } }: any) {
         email: user.email,
         password: user.password,
       });
-      
+
       setLoggeedInUser(response);
       yield put(
         authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
@@ -55,6 +56,27 @@ function* loginUser({ payload: { user } }: any) {
   } catch (error: any) {
     yield put(
       authLoginApiResponseError(AuthLoginActionTypes.LOGIN_USER, error)
+    );
+  }
+}
+
+function* loginRedirect({ payload: token }: any) {
+  try {
+    debugger;
+    if (process.env.REACT_APP_DEFAULTAUTH === "fake") {
+      const response: Promise<any> = yield call(postloginRedirect, token);
+
+      setLoggeedInUser(response);
+      yield put(
+        authLoginApiResponseSuccess(
+          AuthLoginActionTypes.LOGIN_USER_REDIRECT,
+          response
+        )
+      );
+    }
+  } catch (error: any) {
+    yield put(
+      authLoginApiResponseError(AuthLoginActionTypes.LOGIN_USER_REDIRECT, error)
     );
   }
 }
@@ -107,6 +129,7 @@ function* logoutUser() {
 
 function* loginSaga() {
   yield takeEvery(AuthLoginActionTypes.LOGIN_USER, loginUser);
+  yield takeEvery(AuthLoginActionTypes.LOGIN_USER_REDIRECT, loginRedirect);
   yield takeEvery(AuthLoginActionTypes.LOGOUT_USER, logoutUser);
   yield takeLatest(AuthLoginActionTypes.SOCIAL_LOGIN, socialLogin);
 }

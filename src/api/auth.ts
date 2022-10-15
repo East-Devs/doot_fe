@@ -13,14 +13,23 @@ const postFakeForgetPwd = (data: any) =>
 const postJwtForgetPwd = (data: any) =>
   api.create(url.POST_FAKE_JWT_PASSWORD_FORGET, data);
 
-const postFakeLogin = (data: any) => { 
+const postFakeLogin = (data: any) => {
   //safyan
-  // debugger;
-  return axios.post( `${BACKEND_URL}/api/auth/login`, data);
+  debugger;
+  return axios.post(`${BACKEND_URL}/api/auth/login`, data);
   // return api.create(url.POST_FAKE_LOGIN, data);
-}
+};
+
+// redirect from social: doot
+const postloginRedirect = (data: string) => {
+  //safyan
+  debugger;
+  axios.defaults.headers.common["Authorization"] = "Bearer " + data;
+  return axios.get(`${BACKEND_URL}/api/v1/user/loginRedirect/me`);
+  // return api.create(url.POST_FAKE_LOGIN, data);
+};
 const postJwtLogin = (data: any) => {
-  return api.create(url.POST_FAKE_JWT_LOGIN, data)
+  return api.create(url.POST_FAKE_JWT_LOGIN, data);
 };
 
 // Register Method
@@ -48,4 +57,5 @@ export {
   postJwtRegister,
   changePassword,
   postSocialLogin,
+  postloginRedirect,
 };

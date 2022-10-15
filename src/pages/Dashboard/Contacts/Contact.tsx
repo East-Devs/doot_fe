@@ -24,10 +24,8 @@ const ContactItem = ({ contact, onSelectChat }: ContactItemProps) => {
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const fullName = `${contact.firstName} ${contact.lastName}`;
-  const shortName = `${contact.firstName.charAt(0)}${contact.lastName.charAt(
-    0
-  )}`;
+  const fullName = `${contact.fullname}`;
+  const shortName = `${contact.fullname?.charAt(0)}`;
   const colors = [
     "bg-primary",
     "bg-danger",

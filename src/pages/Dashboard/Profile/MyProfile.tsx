@@ -19,9 +19,7 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
+  const fullName = basicDetails ? `${basicDetails.username}` : "-";
   return (
     <>
       <div className="user-profile-img">

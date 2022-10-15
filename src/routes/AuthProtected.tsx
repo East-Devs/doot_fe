@@ -4,16 +4,34 @@ import DefaultLayout from "../layouts/Default/index";
 
 import { useProfile } from "../hooks/index";
 
+interface LocationTypes {
+  from?: Location;
+}
+
 const AuthProtected = (props: any) => {
   const { userProfile, loading } = useProfile();
+  const [redirected, setRedirected] = React.useState<Boolean>(false);
 
   /*
     redirect is un-auth access protected routes via url
   */
-  const location = useLocation();
+  const location = useLocation<LocationTypes>();
+  if (location?.state?.from?.pathname.startsWith("/auth-login/ey")) {
+    setRedirected(true);
+  }
   if (!userProfile && loading) {
     return (
-      <Redirect to={{ pathname: "/auth-login", state: { from: location } }} />
+      <>
+        {true ? (
+          <Redirect
+            to={{ pathname: "/auth-login/:token", state: { from: location } }}
+          />
+        ) : (
+          <Redirect
+            to={{ pathname: "/auth-login", state: { from: location } }}
+          />
+        )}
+      </>
     );
   }
 

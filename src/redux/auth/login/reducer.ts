@@ -10,7 +10,9 @@ const Login = (state = INIT_STATE, action: any) => {
     case AuthLoginActionTypes.API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case AuthLoginActionTypes.LOGIN_USER:
-          localStorage.setItem("authUser",JSON.stringify(action.payload.data) );
+        case AuthLoginActionTypes.LOGIN_USER_REDIRECT:
+          localStorage.setItem("authUser", JSON.stringify(action.payload.data));
+          debugger;
           return {
             ...state,
             user: action.payload.data,
@@ -31,6 +33,7 @@ const Login = (state = INIT_STATE, action: any) => {
     case AuthLoginActionTypes.API_RESPONSE_ERROR:
       switch (action.payload.actionType) {
         case AuthLoginActionTypes.LOGIN_USER:
+        case AuthLoginActionTypes.LOGIN_USER_REDIRECT:
           return {
             ...state,
             error: action.payload.error,
@@ -48,7 +51,10 @@ const Login = (state = INIT_STATE, action: any) => {
           return { ...state };
       }
 
-    case AuthLoginActionTypes.LOGIN_USER: {
+    case AuthLoginActionTypes.LOGIN_USER:
+    case AuthLoginActionTypes.LOGIN_USER_REDIRECT: {
+      debugger;
+
       return {
         ...state,
         loading: true,

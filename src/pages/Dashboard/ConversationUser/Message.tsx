@@ -162,7 +162,12 @@ const Image = ({ image, onImageClick, index, onDeleteImg }: ImageProps) => {
           to={"#"}
           onClick={() => onImageClick(index)}
         >
-          <img src={image.downloadLink} alt="" className="rounded border" crossOrigin="anonymous"/>
+          <img
+            src={image.downloadLink}
+            alt=""
+            className="rounded border"
+            crossOrigin="anonymous"
+          />
         </Link>
       </div>
       <ImageMoreMenu onDelete={onDelete} />
@@ -232,7 +237,7 @@ const Attachments = ({ attachments }: AttachmentsProps) => {
               <div className="d-flex gap-2 font-size-20 d-flex align-items-start">
                 <div>
                   <Button
-                     onClick={() => download(`${BACKEND_URL}/files/${attachment}`, attachment)}
+                    onClick={() => download(`${attachment}`, attachment)}
                     className="text-muted"
                   >
                     <i className="bx bxs-download"></i>
@@ -291,10 +296,11 @@ const Message = ({
 
   const myProfile = getProfileImage(userProfile.profileImage);
   let channelUser;
-  
-  if(isChannel && chatUserDetails && chatUserDetails.members)
-  {
-    channelUser= chatUserDetails.members.find((user: any) => user._id == message.sender);
+
+  if (isChannel && chatUserDetails && chatUserDetails.members) {
+    channelUser = chatUserDetails.members.find(
+      (user: any) => user._id == message.sender
+    );
   }
   const channeluserProfile = getProfileImage(channelUser?.profileImage);
   const chatUserprofile = getProfileImage(chatUserDetails.profileImage);
@@ -327,7 +333,7 @@ const Message = ({
     onDeleteImage(message.mId, imageId);
   };
 
-  console.log('Chat Message', message, hasAttachments);
+  console.log("Chat Message", message, hasAttachments);
   return (
     <li
       className={classnames(
@@ -338,7 +344,11 @@ const Message = ({
     >
       <div className="conversation-list">
         <div className="chat-avatar">
-          <img src={isFromMe ? myProfile : profile} alt="" crossOrigin="anonymous"/>
+          <img
+            src={isFromMe ? myProfile : profile}
+            alt=""
+            crossOrigin="anonymous"
+          />
         </div>
 
         <div className="user-chat-content">

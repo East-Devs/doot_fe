@@ -3,6 +3,7 @@ export enum AuthLoginActionTypes {
   API_RESPONSE_ERROR = "@@auth/login/API_RESPONSE_ERROR",
 
   LOGIN_USER = "@@auth/login/LOGIN_USER",
+  LOGIN_USER_REDIRECT = "@@auth/login/LOGIN_USER_REDIRECT",
   LOGOUT_USER = "@@auth/login/LOGOUT_USER",
   SOCIAL_LOGIN = "@@auth/login/SOCIAL_LOGIN",
 }

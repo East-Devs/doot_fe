@@ -17,9 +17,19 @@ export const authLoginApiResponseError = (
 
 export const loginUser = (user: any) => {
   // was {user}
+  debugger;
   return {
     type: AuthLoginActionTypes.LOGIN_USER,
-    payload: user ,
+    payload: user,
+  };
+};
+
+export const loginRedirect = (token: string) => {
+  // was {user}
+  debugger;
+  return {
+    type: AuthLoginActionTypes.LOGIN_USER_REDIRECT,
+    payload: token,
   };
 };
 

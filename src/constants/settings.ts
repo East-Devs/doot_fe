@@ -30,10 +30,9 @@ export enum STATUS_TYPES {
   DO_NOT_DISTURB = "Do not disturb",
 }
 
-export const BACKEND_URL = "http://localhost:8000";
+export const BACKEND_URL = "http://localhost:4000";
 
-export function getProfileImage(image : string | undefined) {
-  if(!image)
-   return imagePlaceholder;
+export function getProfileImage(image: string | undefined) {
+  if (!image) return imagePlaceholder;
   return `${BACKEND_URL}/images/${image}`;
-};
+}
