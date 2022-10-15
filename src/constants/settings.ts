@@ -30,7 +30,8 @@ export enum STATUS_TYPES {
   DO_NOT_DISTURB = "Do not disturb",
 }
 
-export const BACKEND_URL = "http://localhost:4000";
+// export const BACKEND_URL = "http://localhost:4000";
+export const BACKEND_URL = "https://dootbe.herokuapp.com";
 
 export function getProfileImage(image: string | undefined) {
   if (!image) return imagePlaceholder;
