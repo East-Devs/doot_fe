@@ -13,7 +13,13 @@ const Welcome = () => {
                   <i className="bx bxs-message-alt-detail display-4 text-primary m-0"></i>
                 </div>
               </div>
-              <h4>Welcome to Doot Chat App</h4>
+              <h4
+                style={{
+                  fontFamily: "Montserrat",
+                }}
+              >
+                Welcome to Doot Chat App
+              </h4>
               <p className="text-muted mb-4">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
                 commodo ligula eget dolor. cum sociis natoque penatibus et
